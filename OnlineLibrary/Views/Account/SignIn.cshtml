@@ -1,0 +1,73 @@
+﻿@model UserInputViewModel
+
+@{ 
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="form">
+    <div class="box">
+        <form asp-action="SignIn">
+            <div class="formheader">
+                <h4 class="text-white">@ViewData["Title"]</h4>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.UserName" class="text-white mt-4"></label>
+                <input asp-for="@Model.UserName" class="form-control" required="" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Password" class="text-white mt-4"></label>
+                <input asp-for="@Model.Password" class="form-control" required="">
+            </div>
+
+            <div class="formfooter">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success" value="Confirmar" />
+                </div>
+            </div>
+
+            <div class="formfooter">
+                <p class="text-white">
+                    Não possui uma conta?
+                    <a asp-action="SignUp" class="text-white text-decoration-underline" style="text-decoration:none">Clique aqui!</a>
+                </p>
+            </div>
+
+            <div asp-validation-summary="All" class="form-validation text-danger"></div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .formheader {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-validation {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-end;
+        max-inline-size: 300px;
+    }
+    .box {
+        width: 35vw;
+        height: 80vh;
+        background: #303030;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .formfooter {
+        padding-top:10px;
+        text-align:center;
+    }
+</style>
