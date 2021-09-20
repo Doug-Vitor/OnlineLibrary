@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Extensions;
+using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
+using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System.Threading.Tasks;
 
@@ -11,12 +13,14 @@ namespace OnlineLibrary.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountServices(UserManager<IdentityUser> userManager,  
-            SignInManager<IdentityUser> signInManager)
+        public AccountServices(UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager, IAccountRepository accountRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _accountRepository = accountRepository;
         }
 
         [ValidateAntiForgeryToken]
@@ -29,6 +33,7 @@ namespace OnlineLibrary.Services
             {
                 await _userManager.AddToRoleAsync(user, "Default");
                 await _signInManager.SignInAsync(user, false);
+                await _accountRepository.InsertAsync(new ApplicationUser(user));
                 return true;
             }
 

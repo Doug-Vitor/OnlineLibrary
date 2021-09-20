@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineLibrary.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Data
 {
     public class SeedingServices
     {
+        private readonly AppDbContext _context;
+
+        public SeedingServices(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public static async Task CreateRolesAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -25,7 +30,7 @@ namespace OnlineLibrary.Data
             }
         }
 
-        public static async Task SeedDb()
+        public async Task SeedDbAsync()
         {
         }
     }
