@@ -2,7 +2,7 @@
 
 namespace OnlineLibrary.Models.Enums
 {
-    public enum Department
+    public enum Genre
     {
         [Display(Name = "Artes")]
         Arts,

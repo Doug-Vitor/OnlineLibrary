@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Book>
+
+@foreach (Book book in Model)
+{
+    <div class="booksRow col-4">
+        <h4>@book.Title</h4>
+        <h5>por @book.Author.FullName</h5>
+        <div style="display:inline-block">
+            <h5 style="float:left">@Html.DisplayNameFor(bk => bk.Genre)</h5>
+            <h5 style="float:right">@book.Price</h5>
+        </div>
+
+        <div class="buttons">
+            <a class="btn btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalhes</a>
+        </div>
+    </div>
+}
+
+<style>
+    .booksRow {
+        display:inline-block;
+        justify-content:center;
+        margin: 0 auto;
+        padding-top:50px
+    }
+    .buttons {
+        display:inline-flex;
+        float:right;
+        padding:2px
+    }
+</style>

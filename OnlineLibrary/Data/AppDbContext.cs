@@ -11,11 +11,6 @@ namespace OnlineLibrary.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-        }
-
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }

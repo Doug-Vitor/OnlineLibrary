@@ -248,7 +248,7 @@ namespace OnlineLibrary.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Department")
+                    b.Property<int>("Genre")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")

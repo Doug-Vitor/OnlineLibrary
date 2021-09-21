@@ -1,9 +1,6 @@
 ﻿using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Repositories
@@ -17,7 +14,7 @@ namespace OnlineLibrary.Repositories
             _context = context;
         }
 
-        public async Task InsertAsync(object user)
+        public async Task InsertAsync(ApplicationUser user)
         {
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();

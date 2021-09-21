@@ -13,7 +13,7 @@ namespace OnlineLibrary.Models
 
         [Required(ErrorMessage = "Campo {0} é obrigatório.")]
         [DisplayName("Departamento/Gênero")]
-        public Department Department { get; set; }
+        public Genre Genre { get; set; }
 
         [StringLength(200, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
         [DisplayName("Resumo")]

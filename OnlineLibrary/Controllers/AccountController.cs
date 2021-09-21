@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Models.ViewModels;
-using OnlineLibrary.Services;
 using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -10,11 +9,11 @@ namespace OnlineLibrary.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountServices _userServices;
+        private readonly IAccountServices _accountServices;
 
-        public AccountController(AccountServices userServices)
+        public AccountController(IAccountServices userServices)
         {
-            _userServices = userServices;
+            _accountServices = userServices;
         }
 
         public IActionResult SignUp()
@@ -26,14 +25,14 @@ namespace OnlineLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(UserInputViewModel inputModel)
         {
-            dynamic registered = await _userServices.SignUpAsync(inputModel);
+            dynamic registered = await _accountServices.SignUpAsync(inputModel);
 
             if (registered is true)
                 return RedirectToAction(nameof(Index), "Home");
 
             foreach (IdentityError error in registered)
             {
-                ModelState.AddModelError("", _userServices.GetErrorMessages(error));
+                ModelState.AddModelError("", _accountServices.GetErrorMessages(error));
             }
 
             return View(inputModel);
@@ -48,7 +47,7 @@ namespace OnlineLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(UserInputViewModel inputModel)
         {
-            bool userSigned = await _userServices.SignInAsync(inputModel);
+            bool userSigned = await _accountServices.SignInAsync(inputModel);
 
             if (userSigned)
                 return RedirectToAction(nameof(Index), "Home");
@@ -59,7 +58,7 @@ namespace OnlineLibrary.Controllers
 
         public async Task<IActionResult> SignOut()
         {
-            await _userServices.SignOutAsync();
+            await _accountServices.SignOutAsync();
             return RedirectToAction(nameof(Index), "Home");
         }
     }

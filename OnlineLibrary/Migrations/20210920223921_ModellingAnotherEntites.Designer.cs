@@ -10,8 +10,8 @@ using OnlineLibrary.Data;
 namespace OnlineLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210920020029_ModellingAnotherEntities")]
-    partial class ModellingAnotherEntities
+    [Migration("20210920223921_ModellingAnotherEntites")]
+    partial class ModellingAnotherEntites
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -250,7 +250,7 @@ namespace OnlineLibrary.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Department")
+                    b.Property<int>("Genre")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")

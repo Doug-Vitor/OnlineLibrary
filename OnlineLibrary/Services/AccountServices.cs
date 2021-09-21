@@ -23,6 +23,7 @@ namespace OnlineLibrary.Services
             _accountRepository = accountRepository;
         }
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<dynamic> SignUpAsync(UserInputViewModel inputModel)
         {
@@ -40,6 +41,7 @@ namespace OnlineLibrary.Services
             return result.Errors;
         }
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<bool> SignInAsync(UserInputViewModel inputModel)
         {

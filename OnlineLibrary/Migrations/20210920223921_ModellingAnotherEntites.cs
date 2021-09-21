@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineLibrary.Migrations
 {
-    public partial class ModellingAnotherEntities : Migration
+    public partial class ModellingAnotherEntites : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,7 +29,7 @@ namespace OnlineLibrary.Migrations
                 newName: "IX_ApplicationUsers_IdentityUserId");
 
             migrationBuilder.AddColumn<int>(
-                name: "Department",
+                name: "Genre",
                 table: "Books",
                 type: "int",
                 nullable: false,
@@ -88,7 +88,7 @@ namespace OnlineLibrary.Migrations
                 table: "ApplicationUsers",
                 type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: "ApplicationUser");
+                defaultValue: "");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_ApplicationUsers",
@@ -195,7 +195,7 @@ namespace OnlineLibrary.Migrations
                 table: "ApplicationUsers");
 
             migrationBuilder.DropColumn(
-                name: "Department",
+                name: "Genre",
                 table: "Books");
 
             migrationBuilder.DropColumn(

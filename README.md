@@ -1,6 +1,6 @@
 <h3>Referências:</h3>
 <ul>
- <li>Upload e exibição de imagens: <a href="https://www.youtube.com/watch?v=QpJvqiHl1Fo">Clique aqui.</a></li>
+ <li>Obter o atributo DisplayName de um Enum: <a href="https://stackoverflow.com/questions/13099834/how-to-get-the-display-name-attribute-of-an-enum-member-via-mvc-razor-code">Clique aqui.</a></li>
  </ul>
  
  <br/>

@@ -1,0 +1,14 @@
+﻿<a class="nav-link dropdown-toggle active" data-toggle="dropdown" asp-controller="Books" asp-action="Index"
+   role="button" aria-haspopup="true" aria-expanded="false">Livros</a>
+
+<div class="dropdown-menu">
+    <a class="dropdown-item" asp-controller="Books" asp-action="Index">Todos os livros.</a>
+
+    <div class="dropdown-divider"></div>
+    @foreach (var department in Html.GetEnumSelectList<Genre>())
+    {
+        <a class="dropdown-item" asp-controller="Books" asp-action="GetByGenre" asp-route-enumValue="@department.Value">
+            @department.Text
+        </a>
+    }
+</div>
