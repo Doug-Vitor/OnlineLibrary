@@ -5,7 +5,8 @@ namespace OnlineLibrary.Repositories.Interfaces
 {
     public interface IAccountRepository
     {
-        public Task InsertAsync(ApplicationUser user);
-        public Task ChangeUserToAuthor(ApplicationUser user);
+        Task InsertAsync(ApplicationUser user);
+        Task<Author> GetByIdAsync(string userId);
+        Task ChangeUserToAuthor(ApplicationUser user);
     }
 }

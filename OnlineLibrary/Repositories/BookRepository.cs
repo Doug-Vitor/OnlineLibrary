@@ -56,6 +56,12 @@ namespace OnlineLibrary.Repositories
                 .Skip(booksToSkip).Take(15).ToListAsync();
         }
 
+        public async Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync(string authorUserName)
+        {
+            return await _context.Books
+                .Where(bk => bk.Author.IdentityUser.UserName == authorUserName).ToListAsync();
+        }
+
         public async Task<IEnumerable<Book>> FindByTitleAsync(string title, int? page)
         {
             return await FindByStringParameterAsync(title, page, true);
@@ -89,14 +95,31 @@ namespace OnlineLibrary.Repositories
             return books;
         }
 
-        public Task UpdateAsync(Book book)
+        public async Task UpdateAsync(Book book)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Update(book);
+                await _context.SaveChangesAsync();
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
-        public Task RemoveAsync(int id)
+        public async Task RemoveAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Book book = await GetByIdAsync(id);
+                _context.Remove(book);
+                await _context.SaveChangesAsync();
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
         public async Task<int> GetPageCountAsync()

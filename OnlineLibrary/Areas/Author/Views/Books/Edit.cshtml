@@ -1,0 +1,72 @@
+﻿@model Book
+
+@{
+    ViewData["Title"] = "Edição de livro";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<wbr />
+<div class="row">
+    <form asp-action="Edit">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Author"></label>
+            <input class="form-control form-input" asp-for="Author" value="@Model.Author.FullName" readonly="" />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Title"></label>
+            <input class="form-control form-input" asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Genre"></label>
+            <select class="form-control form-input" asp-for="Genre" asp-items="Html.GetEnumSelectList(typeof(Genre))"></select>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Price"></label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">R$</span>
+                <input type="text" class="form-control" style="max-width:200px" asp-for="Price">
+            </div>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="Summary"></label>
+            <textarea class="form-control" style="max-width:650px" rows="5" asp-for="Summary"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="buttons">
+                <input type="hidden" asp-for="AuthorId" value="@Model.Author.Id" />
+                <input class="btn btn-success" type="submit" value="Confirmar" />
+                <a class="btn btn-danger" asp-action="Remove" asp-route-id="@Model.Id">Excluir</a>
+                <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-label {
+        padding-top: 20px;
+    }
+
+    .form-input {
+        max-width: 350px;
+    }
+
+    .buttons {
+        display:flex;
+        justify-content:right;
+    }
+
+    .btn {
+        margin:2px;
+    }
+</style>

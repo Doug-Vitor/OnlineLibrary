@@ -1,6 +1,8 @@
-﻿using OnlineLibrary.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Repositories
@@ -18,6 +20,12 @@ namespace OnlineLibrary.Repositories
         {
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Author> GetByIdAsync(string userId)
+        {
+            return await _context.Authors
+                .Where(user => user.IdentityUser.Id == userId).FirstOrDefaultAsync();
         }
 
         public async Task ChangeUserToAuthor(ApplicationUser user)

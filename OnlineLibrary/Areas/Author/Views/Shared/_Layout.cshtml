@@ -18,38 +18,17 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Início</a>
+                            <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Retornar ao site</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            @await Component.InvokeAsync("BooksDropdown")
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="Author" asp-controller="Home" asp-action="Index">Início</a>
                         </li>
-                        @if (User.IsInRole("Default"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Account" asp-action="ChangeUserToAuthor">Quero ser autor</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Author"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="Author" asp-controller="Home" asp-action="Index">Minha área</a>
-                            </li>
-                        }
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Account" asp-action="SignOut">Sair</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Account" asp-action="SignIn">Entrar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Account" asp-action="SignUp">Registrar</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="Author" asp-controller="Books" asp-action="Create">Novo livro  </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Account" asp-action="SignOut">Sair</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -20,6 +20,7 @@ namespace OnlineLibrary.Models
         public string Summary { get; set; }
 
         [Required]
+        [Range(20, 1000, ErrorMessage = "{0} deve estar entre R${1} e R${2}")]
         [DisplayName("Preço")]
         public double Price { get; set; }
 

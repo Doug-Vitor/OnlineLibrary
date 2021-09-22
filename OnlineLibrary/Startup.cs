@@ -26,6 +26,7 @@ namespace OnlineLibrary
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration
                 .GetConnectionString("Default")));
             services.AddScoped<SeedingServices>();
@@ -61,6 +62,9 @@ namespace OnlineLibrary
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(
+                    name: "AreaAuthor",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

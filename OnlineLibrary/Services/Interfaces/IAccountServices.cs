@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using System.Threading.Tasks;
 
@@ -6,9 +7,10 @@ namespace OnlineLibrary.Services.Interfaces
 {
     public interface IAccountServices
     {
-        public Task<dynamic> SignUpAsync(UserInputViewModel inputModel);
-        public Task<bool> SignInAsync(UserInputViewModel inputModel);
-        public Task SignOutAsync();
-        public string GetErrorMessages(IdentityError error);
+        Task<dynamic> SignUpAsync(UserInputViewModel inputModel);
+        Task<bool> SignInAsync(UserInputViewModel inputModel);
+        Task SignOutAsync();
+        Task<Author> GetAuthorAuthenticatedAsync(string userId);
+        string GetErrorMessages(IdentityError error);
     }
 }

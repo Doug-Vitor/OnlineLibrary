@@ -1,0 +1,58 @@
+﻿@model BookInputViewModel
+
+@{ 
+    ViewData["Title"] = "Criação de livro";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<wbr />
+<div class="row">
+    <form asp-action="Create">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Author"></label>
+            <input class="form-control form-input" asp-for="Author" value="@Model.Author.FullName" readonly="" />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="@Model.Book.Title"></label>
+            <input class="form-control form-input" asp-for="@Model.Book.Title" />
+            <span asp-validation-for="@Model.Book.Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="@Model.Book.Genre"></label>
+            <select class="form-control form-input" asp-for="@Model.Book.Genre" asp-items="Html.GetEnumSelectList(typeof(Genre))"></select>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="@Model.Book.Price"></label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">R$</span>
+                <input type="text" class="form-control" style="max-width:200px" asp-for="@Model.Book.Price">
+            </div>
+            <span asp-validation-for="@Model.Book.Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="@Model.Book.Summary"></label>
+            <textarea class="form-control" style="max-width:650px" rows="5" asp-for="@Model.Book.Summary"></textarea>
+            <span asp-validation-for="@Model.Book.Summary" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" asp-for="@Model.Book.AuthorId" value="@Model.Author.Id"/>
+            <input class="btn btn-success" style="float:right; margin:2px" type="submit" value="Confirmar" />
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-label {
+        padding-top:20px;
+    }
+    .form-input {
+        max-width:350px;
+    }
+</style>

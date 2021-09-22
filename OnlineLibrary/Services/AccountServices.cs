@@ -61,6 +61,11 @@ namespace OnlineLibrary.Services
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<Author> GetAuthorAuthenticatedAsync(string userId)
+        {
+            return await _accountRepository.GetByIdAsync(userId);
+        }
+
         public string GetErrorMessages(IdentityError error)
         {
             if (IdentityErrorExtensions.ErrorIsSafeToShare(error))
