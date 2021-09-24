@@ -20,6 +20,7 @@ namespace OnlineLibrary.Models
         [StringLength(200, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
         public string ShortBiography { get; set; }
 
+        public string ImagePath { get; set; }
         public virtual List<Book> PublishedBooks { get; set; }
 
         public Author()

@@ -8,8 +8,8 @@
 
 <wbr />
 <div class="row">
-    <form asp-action="Edit">
-        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label class="col-form-label" asp-for="Author"></label>
             <input class="form-control form-input" asp-for="Author" value="@Model.Author.FullName" readonly="" />
@@ -42,8 +42,13 @@
         </div>
 
         <div class="form-group">
+            <input type="file"  name="file" class="custom-file-input" />
+        </div>
+
+        <div class="form-group">
             <div class="buttons">
                 <input type="hidden" asp-for="AuthorId" value="@Model.Author.Id" />
+
                 <input class="btn btn-success" type="submit" value="Confirmar" />
                 <a class="btn btn-danger" asp-action="Remove" asp-route-id="@Model.Id">Excluir</a>
                 <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Cancelar</a>

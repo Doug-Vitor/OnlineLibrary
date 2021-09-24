@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using OnlineLibrary.Repositories;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services;
 using OnlineLibrary.Services.Interfaces;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace OnlineLibrary
 {
@@ -29,19 +32,29 @@ namespace OnlineLibrary
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration
                 .GetConnectionString("Default")));
-            services.AddScoped<SeedingServices>();
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<SeedingServices>();
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IImageManagerServices, ImageManagerServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             SeedingServices seedingServices)
         {
+            CultureInfo ptBr = CultureInfo.CurrentCulture;
+            RequestLocalizationOptions localizationOptions = new()
+            {
+                DefaultRequestCulture = new RequestCulture(ptBr),
+                SupportedCultures = new List<CultureInfo> { ptBr },
+                SupportedUICultures = new List<CultureInfo> { ptBr },
+            };
+            app.UseRequestLocalization(localizationOptions);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

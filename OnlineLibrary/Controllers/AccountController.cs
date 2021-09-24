@@ -32,7 +32,7 @@ namespace OnlineLibrary.Controllers
 
             foreach (IdentityError error in registered)
             {
-                ModelState.AddModelError("", _accountServices.GetErrorMessages(error));
+                ModelState.AddModelError(string.Empty, _accountServices.GetErrorMessages(error));
             }
 
             return View(inputModel);
@@ -52,7 +52,7 @@ namespace OnlineLibrary.Controllers
             if (userSigned)
                 return RedirectToAction(nameof(Index), "Home");
 
-            ModelState.AddModelError("", "Não foi possível encontrar um usuário correspondente às credenciais informadas.");
+            ModelState.AddModelError(string.Empty, "Não foi possível encontrar um usuário correspondente às credenciais informadas.");
             return View(inputModel);
         }
 

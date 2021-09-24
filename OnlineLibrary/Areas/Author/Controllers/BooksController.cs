@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Areas.Author.Models;
 using OnlineLibrary.Models;
@@ -7,6 +8,7 @@ using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -18,12 +20,14 @@ namespace OnlineLibrary.Areas.Author.Controllers
     {
         private readonly IBookRepository _bookRepository;
         private readonly IAccountServices _accountServices;
+        private readonly IImageManagerServices _imageManagerServices;
 
-
-        public BooksController(IBookRepository bookRepository, IAccountServices accountServices)
+        public BooksController(IBookRepository bookRepository, IAccountServices accountServices,
+            IImageManagerServices imageManagerServices)
         {
             _bookRepository = bookRepository;
             _accountServices = accountServices;
+            _imageManagerServices = imageManagerServices;
         }
 
         public async Task <IActionResult> Create()
@@ -34,7 +38,7 @@ namespace OnlineLibrary.Areas.Author.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create(Book book, IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -60,14 +64,23 @@ namespace OnlineLibrary.Areas.Author.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Book book)
+        public async Task<IActionResult> Edit(Book book, IFormFile file)
         {
-            if (ModelState.IsValid)
+            string imageUpload = await _imageManagerServices.UploadBookImageAsync(file, book.Id);
+            if (string.IsNullOrWhiteSpace(imageUpload))
             {
-                await _bookRepository.UpdateAsync(book);
-                return RedirectToAction(nameof(Index), "Home");
+                if (ModelState.IsValid)
+                {
+                    book.ImagePath = $"~/Images/BookImages/{book.Id}.png";
+                    await _bookRepository.UpdateAsync(book);
+                    return RedirectToAction(nameof(Index), "Home");
+                }
             }
+            else
+                ModelState.AddModelError(string.Empty, imageUpload);
 
+            string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            book.Author = await _accountServices.GetAuthorAuthenticatedAsync(authenticatedUserId);
             return View(book);
         }
 

@@ -1,0 +1,43 @@
+﻿@model Book
+
+@{
+    ViewData["Title"] = $"{Model.Title}: detalhes";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="container" style="display:flex;">
+    <div class="left-div">
+        <img src="@Model.ImagePath" width="390" height="390" asp-append-version="true" />
+        <p>@Model.Summary</p>
+
+        <wbr />
+        <h4>Autor: @Model.Author.FullName</h4>
+        <a class="btn btn-outline-info">Detalhes do autor</a>
+    </div>
+
+    <div class="right-div">
+        <label class="col-form-label" asp-for="Title"></label>
+        <input class="form-control" readonly="" asp-for="Title" />
+
+        <label class="col-form-label" asp-for="Price"></label>
+        <input class="form-control" readonly="" asp-for="Price" />
+
+        <div style="text-align:right;padding:20px">
+            <a class="btn btn-info">Adicionar ao carrinho</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .left-div {
+        width:600px;
+        max-width:600px;
+        text-align:left;
+    }
+    .right-div {
+        width: 600px;
+        max-width: 600px;
+        text-align: left;
+    }
+</style>

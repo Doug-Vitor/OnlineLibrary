@@ -6,6 +6,7 @@ using OnlineLibrary.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -61,6 +62,18 @@ namespace OnlineLibrary.Controllers
             return View(new BookViewModel("Livros por gênero", $"Resultados para: {genreName}", 
                 page ?? 1, await _bookRepository.GetPageCountAsync(),
                 await _bookRepository.GetByGenre(enumValue, page)));
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            try
+            {
+                return View(await _bookRepository.GetByIdAsync(id));
+            }
+            catch (ApplicationException error)
+            {
+                return RedirectToAction(nameof(Error), new { message = error.Message });
+            }
         }
 
         public IActionResult Error(string message)

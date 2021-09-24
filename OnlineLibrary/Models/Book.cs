@@ -1,6 +1,7 @@
 ﻿using OnlineLibrary.Models.Enums;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace OnlineLibrary.Models
 {
@@ -23,6 +24,7 @@ namespace OnlineLibrary.Models
         [Range(20, 1000, ErrorMessage = "{0} deve estar entre R${1} e R${2}")]
         [DisplayName("Preço")]
         public double Price { get; set; }
+        public string ImagePath { get; set; }
 
         public int AuthorId { get; set; }
 

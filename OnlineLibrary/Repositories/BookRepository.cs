@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Models.Enums;
@@ -6,6 +7,7 @@ using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,14 +16,17 @@ namespace OnlineLibrary.Repositories
     public class BookRepository : IBookRepository
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BookRepository(AppDbContext context)
+        public BookRepository(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task InsertAsync(Book book)
         {
+            book.ImagePath = "~/Images/BookImages/Default.png";
             _context.Add(book);
             await _context.SaveChangesAsync();
         }
@@ -97,15 +102,22 @@ namespace OnlineLibrary.Repositories
 
         public async Task UpdateAsync(Book book)
         {
-            try
-            {
-                _context.Update(book);
-                await _context.SaveChangesAsync();
-            }
-            catch (ApplicationException)
-            {
-                throw;
-            }
+            if (EnsureFileExists(book.Id) == false)
+                book.ImagePath = "~/Images/BookImages/Default.png";
+
+            _context.Update(book);
+            await _context.SaveChangesAsync();
+        }
+
+        private bool EnsureFileExists(int bookId)
+        {
+            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                $@"Images\BookImages\{bookId}.png");
+
+            if (File.Exists(imagePath))
+                return true;
+
+            return false;
         }
 
         public async Task RemoveAsync(int id)
