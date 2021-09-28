@@ -1,0 +1,51 @@
+﻿@model Author
+
+@{
+    ViewData["Title"] = "Meu perfil";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<wbr />
+<div class="container" style="display:flex;">
+    <div class="left-div">
+        <img src="@Model.ImagePath" width="390" height="390" asp-append-version="true" />
+        
+        <div>
+            <label class="h4" asp-for="ShortBiography"></label>
+            @if (string.IsNullOrWhiteSpace(Model.ShortBiography))
+            {
+                <p class="col-form-label">Ops... Você ainda não inseriu nada aqui!</p>
+            }
+            else
+            {
+                <p class="col-form-label" asp-for="ShortBiography"></p>
+            }
+        </div>
+    </div>
+    <div class="right-div">
+        <label asp-for="FullName"></label>
+        <input class="form-control" asp-for="FullName" readonly="" />
+
+        <label asp-for="Birthdate"></label>
+        <input class="form-control" asp-for="Birthdate" readonly="" />
+
+        <div style="text-align:right;padding:20px;">
+            <a class="btn btn-success" asp-action="Edit">Editar</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .left-div {
+        width: 600px;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .right-div {
+        width: 600px;
+        max-width: 600px;
+        text-align: left;
+    }
+</style>

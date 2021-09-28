@@ -8,7 +8,6 @@ using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,14 +18,14 @@ namespace OnlineLibrary.Areas.Author.Controllers
     public class BooksController : Controller
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IAccountServices _accountServices;
+        private readonly IAccountRepository _accountRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public BooksController(IBookRepository bookRepository, IAccountServices accountServices,
+        public BooksController(IBookRepository bookRepository, IAccountRepository accountRepository,
             IImageManagerServices imageManagerServices)
         {
             _bookRepository = bookRepository;
-            _accountServices = accountServices;
+            _accountRepository = accountRepository;
             _imageManagerServices = imageManagerServices;
         }
 
@@ -34,11 +33,11 @@ namespace OnlineLibrary.Areas.Author.Controllers
         {
             string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(new BookInputViewModel(
-                await _accountServices.GetAuthorAuthenticatedAsync(authenticatedUserId)));
+                await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId)));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Book book, IFormFile file)
+        public async Task<IActionResult> Create(Book book, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
@@ -48,14 +47,14 @@ namespace OnlineLibrary.Areas.Author.Controllers
 
             string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(new BookInputViewModel(
-                await _accountServices.GetAuthorAuthenticatedAsync(authenticatedUserId), book));
+                await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId), book));
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
-                return View(await _bookRepository.GetByIdAsync(id));
+                return View(await _bookRepository.GetAuthorByIdAsync(id));
             }
             catch (ApplicationException error)
             {
@@ -64,10 +63,10 @@ namespace OnlineLibrary.Areas.Author.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Book book, IFormFile file)
+        public async Task<IActionResult> Edit(Book book, IFormFile imageFile)
         {
-            string imageUpload = await _imageManagerServices.UploadBookImageAsync(file, book.Id);
-            if (string.IsNullOrWhiteSpace(imageUpload))
+            string imageUploadResult = await _imageManagerServices.UploadBookImageAsync(imageFile, book.Id);
+            if (string.IsNullOrWhiteSpace(imageUploadResult))
             {
                 if (ModelState.IsValid)
                 {
@@ -77,10 +76,10 @@ namespace OnlineLibrary.Areas.Author.Controllers
                 }
             }
             else
-                ModelState.AddModelError(string.Empty, imageUpload);
+                ModelState.AddModelError(string.Empty, imageUploadResult);
 
             string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            book.Author = await _accountServices.GetAuthorAuthenticatedAsync(authenticatedUserId);
+            book.Author = await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId);
             return View(book);
         }
 
@@ -88,7 +87,7 @@ namespace OnlineLibrary.Areas.Author.Controllers
         {
             try
             {
-                return View(await _bookRepository.GetByIdAsync(id));
+                return View(await _bookRepository.GetAuthorByIdAsync(id));
             }
             catch (ApplicationException error)
             {

@@ -1,0 +1,63 @@
+﻿@model Author
+
+@{ 
+    ViewData["Title"] = "Tornar-se autor";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<wbr />
+<P>É necessário fornecer alguns dados antes de se tornar um autor. Tais dados facilitarão as escolhas dos leitores ao decidir comprar ou não o seu futuro livro.</P>
+
+<div>
+    <form asp-action="ChangeUserToAuthor">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="container">
+            <div class="form-group">
+                <label class="col-form-label" asp-for="FullName"></label>
+                <input class="form-control" style="width:400px" asp-for="FullName" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" asp-for="Birthdate"></label>
+                <input class="form-control" asp-for="Birthdate" />
+                <span asp-validation-for="Birthdate" class="text-danger"></span>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-form-label" asp-for="ShortBiography"></label>
+            <textarea class="form-control" style="width:1200px;" rows="5" asp-for="ShortBiography"></textarea>
+            <span asp-validation-for="ShortBiography" class="text-danger"></span>
+
+        </div>
+
+        <div class="footer-div">
+            <div class="footer-infos">
+                <p class="text-danger">Não será possível reverter essa ação. Planejamos adicionar essa opção no futuro.</p>
+                <input class="btn btn-success" type="submit" value="Confirmar" />
+                <a class="btn btn-outline-dark" style="margin:2px;" asp-controller="Home" asp-action="Index">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        display:flex;
+        justify-content:center;
+    }
+    .form-group {
+        display:inline-block;
+        padding:5px;
+    }
+    .footer-div {
+        display: flex;
+        justify-content: right;
+    }
+    .footer-infos {
+        display:inline-flex;
+        align-items:center;
+    }
+</style>

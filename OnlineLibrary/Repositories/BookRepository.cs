@@ -16,12 +16,12 @@ namespace OnlineLibrary.Repositories
     public class BookRepository : IBookRepository
     {
         private readonly AppDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public BookRepository(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+        public BookRepository(AppDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task InsertAsync(Book book)
@@ -38,7 +38,7 @@ namespace OnlineLibrary.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Book> GetByIdAsync(int? id)
+        public async Task<Book> GetAuthorByIdAsync(int? id)
         {
             if (id is null)
                 throw new IdNotProvidedException("ID não informado");
@@ -111,9 +111,8 @@ namespace OnlineLibrary.Repositories
 
         private bool EnsureFileExists(int bookId)
         {
-            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+            string imagePath = Path.Combine(_hostEnvironment.WebRootPath,
                 $@"Images\BookImages\{bookId}.png");
-
             if (File.Exists(imagePath))
                 return true;
 
@@ -124,7 +123,7 @@ namespace OnlineLibrary.Repositories
         {
             try
             {
-                Book book = await GetByIdAsync(id);
+                Book book = await GetAuthorByIdAsync(id);
                 _context.Remove(book);
                 await _context.SaveChangesAsync();
             }

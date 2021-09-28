@@ -38,6 +38,8 @@ namespace OnlineLibrary
             services.AddScoped<SeedingServices>();
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IImageManagerServices, ImageManagerServices>();
         }
@@ -46,7 +48,7 @@ namespace OnlineLibrary
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             SeedingServices seedingServices)
         {
-            CultureInfo ptBr = CultureInfo.CurrentCulture;
+            CultureInfo ptBr = new("pt-BR");
             RequestLocalizationOptions localizationOptions = new()
             {
                 DefaultRequestCulture = new RequestCulture(ptBr),

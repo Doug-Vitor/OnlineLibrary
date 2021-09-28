@@ -17,17 +17,20 @@ namespace OnlineLibrary.Extensions
             { "PasswordTooShort", "A senha deve conter pelo menos 6 caracteres." },
         };
 
-        public static bool ErrorIsSafeToShare(IdentityError error)
+        private static bool ErrorIsSafeToShare(string errorCode)
         {
-            if (ErrorsCodeSafeToShareWithTranslation.Keys.Contains(error.Code))
+            if (ErrorsCodeSafeToShareWithTranslation.Keys.Contains(errorCode))
                 return true;
 
             return false;
         }
 
-        public static string TranslateErrorDescription(string errorCode)
+        public static string TranslatedErrorDescription(IdentityError error)
         {
-            return ErrorsCodeSafeToShareWithTranslation.GetValueOrDefault(errorCode);
+            if (ErrorIsSafeToShare(error.Code))
+                return ErrorsCodeSafeToShareWithTranslation.GetValueOrDefault(error.Code);
+
+            return "Ocorreu um erro desconhecido.";
         }
     }
 }

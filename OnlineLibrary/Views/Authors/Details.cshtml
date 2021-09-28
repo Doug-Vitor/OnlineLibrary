@@ -1,0 +1,51 @@
+﻿@model Author
+
+@{
+    ViewData["Title"] = $"{Model.FullName}: detalhes";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<wbr />
+<div class="container" style="display:flex;">
+    <div class="left-div">
+        <img src="@Model.ImagePath" width="390" height="390" asp-append-version="true" />
+
+        <div>
+            <label class="h4">Biografia</label>
+            @if (string.IsNullOrWhiteSpace(Model.ShortBiography))
+            {
+                <p class="col-form-label">Ops... O autor ainda não possui uma biografia!</p>
+            }
+            else
+            {
+                <p class="col-form-label" asp-for="ShortBiography"></p>
+            }
+        </div>
+    </div>
+    <div class="right-div">
+        <label asp-for="FullName"></label>
+        <input class="form-control" asp-for="FullName" readonly="" />
+
+        <label asp-for="Birthdate"></label>
+        <input class="form-control" asp-for="Birthdate" readonly="" />
+
+        <div style="text-align:right;padding:20px;">
+            <a class="btn btn-info" asp-controller="Books" asp-action="FindByAuthor" asp-route-searchString="@Model.FullName">Livros deste autor</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .left-div {
+        width: 600px;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .right-div {
+        width: 600px;
+        max-width: 600px;
+        text-align: left;
+    }
+</style>

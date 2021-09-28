@@ -13,10 +13,12 @@ namespace OnlineLibrary.Models
         [DisplayName("Nome completo")] 
         public string FullName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo {0} é obrigatório.")]
         [DisplayName("Data de nascimento")]
+        [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 
+        [DisplayName("Sua biografia")]
         [StringLength(200, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
         public string ShortBiography { get; set; }
 

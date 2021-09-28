@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,24 +18,18 @@ namespace OnlineLibrary.Repositories
             _context = context;
         }
 
-        public async Task InsertAsync(ApplicationUser user)
+        public async Task<ApplicationUser> GetAuthenticatedUserByIdAsync(string identityUserId)
         {
-            await _context.AddAsync(user);
-            await _context.SaveChangesAsync();
+            return await _context.ApplicationUsers
+                .Where(user => user.IdentityUser.Id == identityUserId)
+                .Include(user => user.IdentityUser).Include(user => user.Purchases)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<Author> GetByIdAsync(string userId)
+        public async Task<Author> GetAuthenticatedAuthorByIdAsync(string identityUserId)
         {
-            return await _context.Authors
-                .Where(user => user.IdentityUser.Id == userId).FirstOrDefaultAsync();
-        }
-
-        public async Task ChangeUserToAuthor(ApplicationUser user)
-        {
-            Author author = user as Author;
-            _context.Remove(user);
-            await _context.AddAsync(author);
-            await _context.SaveChangesAsync();
+            return await _context.Authors.Where(user => user.IdentityUser.Id == identityUserId)
+                .FirstOrDefaultAsync();
         }
     }
 }

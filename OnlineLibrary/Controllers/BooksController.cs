@@ -68,7 +68,7 @@ namespace OnlineLibrary.Controllers
         {
             try
             {
-                return View(await _bookRepository.GetByIdAsync(id));
+                return View(await _bookRepository.GetAuthorByIdAsync(id));
             }
             catch (ApplicationException error)
             {

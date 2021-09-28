@@ -13,7 +13,7 @@
 
         <wbr />
         <h4>Autor: @Model.Author.FullName</h4>
-        <a class="btn btn-outline-info">Detalhes do autor</a>
+        <a class="btn btn-outline-info" asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId">Detalhes do autor</a>
     </div>
 
     <div class="right-div">

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Services.Interfaces;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -60,6 +63,26 @@ namespace OnlineLibrary.Controllers
         {
             await _accountServices.SignOutAsync();
             return RedirectToAction(nameof(Index), "Home");
+        }
+
+        [Authorize(Roles = "Default")]
+        public IActionResult ChangeUserToAuthor()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Default")]
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserToAuthor(Author author)
+        {
+            if (ModelState.IsValid)
+            {
+                string autheticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _accountServices.ChangeUserToAuthor(autheticatedUserId, author);
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
+            return View(author);
         }
     }
 }

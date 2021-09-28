@@ -1,0 +1,53 @@
+﻿@model Author
+
+@{
+    ViewData["Title"] = "Editar perfil";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="container">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="FullName"></label>
+            <input class="form-control" asp-for="FullName" />
+            <span class="text-danger" asp-validation-for="FullName"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Birthdate"></label>
+            <input class="form-control" asp-for="Birthdate" />
+            <span class="text-danger" asp-validation-for="Birthdate"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="ShortBiography"></label>
+            <textarea class="form-control" style="width:1000px;" rows="5" asp-for="ShortBiography"></textarea>
+            <span class="text-danger" asp-validation-for="ShortBiography"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="file" name="imageFile" />
+        </div>
+
+
+        <div class="form-group">
+            <div class="footer-buttons">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" class="btn btn-success" value="Confirmar" />
+                <a class="btn btn-outline-dark" asp-action="MyProfile">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-group {
+        max-width:400px;
+    }
+    .footer-buttons {
+        text-align:right;
+        padding:20px;
+    }
+</style>
