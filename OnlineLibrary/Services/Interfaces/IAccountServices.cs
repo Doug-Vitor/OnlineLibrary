@@ -10,7 +10,7 @@ namespace OnlineLibrary.Services.Interfaces
         Task<dynamic> SignUpAsync(UserInputViewModel inputModel);
         Task<bool> SignInAsync(UserInputViewModel inputModel);
         Task SignOutAsync();
-        Task ChangeUserToAuthor(string authenticatedUserId, Author author);
+        Task ChangeUserToAuthor(Author author);
         string GetErrorMessages(IdentityError error);
     }
 }

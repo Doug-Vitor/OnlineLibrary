@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineLibrary.Data;
+using OnlineLibrary.Extensions;
 using OnlineLibrary.Repositories;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services;
@@ -30,18 +31,28 @@ namespace OnlineLibrary
         {
             services.AddControllersWithViews();
 
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
+            services.AddHttpContextAccessor().AddSingleton<HttpContextExtensions>();
+
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration
                 .GetConnectionString("Default")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<SeedingServices>();
+
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
+
             services.AddScoped<IImageManagerServices, ImageManagerServices>();
+
+            services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+            services.AddScoped<IShoppingCartServices, ShoppingCartServices>();
+            services.AddScoped<IShoppingCartItemsRepository, ShoppingCartItemsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +71,7 @@ namespace OnlineLibrary
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                seedingServices.SeedDbAsync();
+                seedingServices.SeedDb();
             }
             else
             {

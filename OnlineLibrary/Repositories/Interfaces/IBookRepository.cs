@@ -7,8 +7,9 @@ namespace OnlineLibrary.Repositories.Interfaces
     public interface IBookRepository
     {
         Task InsertAsync(Book book);
+        Task<Book> GetByIdAsync(int? id);
         Task<IEnumerable<Book>> GetAllAsync(int? page);
-        Task<Book> GetAuthorByIdAsync(int? id);
+        Task<Book> GetAuthorByIdAsync(int? authorId);
         Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync(string authorUserName);
         Task<IEnumerable<Book>> GetByGenre(int enumValue, int? page);
         Task<IEnumerable<Book>> FindByTitleAsync(string title, int? page);

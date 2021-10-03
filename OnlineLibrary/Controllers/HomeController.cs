@@ -8,5 +8,10 @@ namespace OnlineLibrary.Controllers
         {
             return View();
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

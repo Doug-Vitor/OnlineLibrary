@@ -11,14 +11,13 @@ using System.Threading.Tasks;
 
 namespace OnlineLibrary.Repositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository : AbstractRepository, IAuthorRepository
     {
-        private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public AuthorRepository(AppDbContext context, IWebHostEnvironment hostEnvironment)
+            : base(context)
         {
-            _context = context;
             _hostEnvironment = hostEnvironment;
         }
 

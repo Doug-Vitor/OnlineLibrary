@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Areas.Author.Models;
+using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Diagnostics;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Areas.Author.Controllers
@@ -18,20 +18,23 @@ namespace OnlineLibrary.Areas.Author.Controllers
     public class BooksController : Controller
     {
         private readonly IBookRepository _bookRepository;
+        private readonly HttpContextExtensions _contextExtensions;
         private readonly IAccountRepository _accountRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public BooksController(IBookRepository bookRepository, IAccountRepository accountRepository,
-            IImageManagerServices imageManagerServices)
+        public BooksController(IBookRepository bookRepository, 
+            HttpContextExtensions contextExtensions, 
+            IAccountRepository accountRepository,  IImageManagerServices imageManagerServices)
         {
             _bookRepository = bookRepository;
+            _contextExtensions = contextExtensions;
             _accountRepository = accountRepository;
             _imageManagerServices = imageManagerServices;
         }
 
         public async Task <IActionResult> Create()
         {
-            string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             return View(new BookInputViewModel(
                 await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId)));
         }
@@ -45,7 +48,7 @@ namespace OnlineLibrary.Areas.Author.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             return View(new BookInputViewModel(
                 await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId), book));
         }
@@ -78,7 +81,7 @@ namespace OnlineLibrary.Areas.Author.Controllers
             else
                 ModelState.AddModelError(string.Empty, imageUploadResult);
 
-            string authenticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             book.Author = await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId);
             return View(book);
         }

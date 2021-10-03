@@ -2,7 +2,7 @@
 
 @foreach (Book book in Model)
 {
-    <div class="booksRow col-4">
+    <div class="books-column col-4">
         <div style="text-align:center">
             <img src="@book.ImagePath" width="125" height="125" loading="lazy" asp-append-version="true" />
         </div>
@@ -10,24 +10,45 @@
 
         <wbr />
         <h5>por @book.Author.FullName</h5>
-        <div style="height:30px">
-            <h5 class="bookInfo" style="max-width:170px">@book.Genre.GetDisplayName()</h5>
-            <h5 class="bookInfo" style="float:right">@book.Price.ToString("C2", CultureInfo.CurrentCulture)</h5>
+
+        <div class="book-infos">
+            <div class="left-line">
+                <h5>@book.Genre.GetDisplayName()</h5>
+            </div>
+            <div class="right-line">
+                <h5>@book.Price.ToString("C2")</h5>
+            </div>
         </div>
 
-        <a class="btn btn-info" style="float:right" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalhes</a>
+        <div class="book-infos">
+            <div class="book-buttons">
+                <a asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@book.Id">
+                    <img src="~/Images/add-to-cart.png" width="40" height="40" asp-append-version="true"/>
+                </a>
+                <a class="btn btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalhes</a>
+            </div>
+        </div>
     </div>
 }
 
 <style>
-    .booksRow {
+    .books-column {
         justify-content: center;
         margin: 0 auto;
         padding-top: 50px
     }
 
-    .bookInfo {
-        max-height: 2px;
-        display: inline-block
+    .book-infos {
+        display:flex;
+        align-items:center;
+    }
+    .left-line {
+        text-align: left;
+    }
+    .right-line {
+        text-align: right;
+    }
+    .book-infos {
+        float:right;
     }
 </style>

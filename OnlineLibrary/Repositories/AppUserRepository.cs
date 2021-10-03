@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 
 namespace OnlineLibrary.Repositories
 {
-    public class AppUserRepository : IAppUserRepository
+    public class AppUserRepository : AbstractRepository, IAppUserRepository
     {
-        private readonly AppDbContext _context;
-
-        public AppUserRepository(AppDbContext context)
+        public AppUserRepository(AppDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task InsertAsync(ApplicationUser user)

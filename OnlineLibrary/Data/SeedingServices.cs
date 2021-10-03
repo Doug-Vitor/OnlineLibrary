@@ -30,7 +30,7 @@ namespace OnlineLibrary.Data
             }
         }
 
-        public async Task SeedDbAsync()
+        public void SeedDb()
         {
         }
     }

@@ -5,8 +5,9 @@ namespace OnlineLibrary.Models
 {
     public class ApplicationUser : Entity
     {
-        public IdentityUser IdentityUser { get; set; }
-        public virtual List<Purchase> Purchases { get; set; }
+        public IdentityUser IdentityUser { get; protected set; }
+        public virtual ShoppingCart ShoppingCart { get; protected set; }
+        public virtual List<Purchase> Purchases { get; protected set; }
 
         public ApplicationUser()
         {

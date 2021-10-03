@@ -36,5 +36,13 @@ namespace OnlineLibrary.Models
             FullName = fullName;
             ShortBiography = shortBiography;
         }
+
+        public void UpdateFields(IdentityUser identityUser, ShoppingCart shoppingCart,
+            List<Purchase> purchases)
+        {
+            IdentityUser = identityUser;
+            ShoppingCart = shoppingCart;
+            Purchases = purchases;
+        }
     }
 }

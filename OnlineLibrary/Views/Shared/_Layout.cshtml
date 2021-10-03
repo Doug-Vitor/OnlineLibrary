@@ -23,6 +23,12 @@
                         <li class="nav-item dropdown">
                             @await Component.InvokeAsync("BooksDropdown")
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-controller="ShoppingCart" asp-action="Index">Meu carrinho</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Default"))
                         {
                             <li class="nav-item">

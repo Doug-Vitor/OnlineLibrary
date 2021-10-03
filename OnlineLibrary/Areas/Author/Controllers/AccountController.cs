@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OnlineLibrary.Extensions;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
-using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Areas.Author.Controllers
@@ -13,13 +12,18 @@ namespace OnlineLibrary.Areas.Author.Controllers
     [Authorize(Roles="Author")]
     public class AccountController : Controller
     {
+        private readonly HttpContextExtensions _contextExtensions;
+        private readonly IAccountServices _accountServices;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public AccountController(IAccountRepository accountRepository, IAuthorRepository authorRepository,
-            IImageManagerServices imageManagerServices)
+        public AccountController(HttpContextExtensions contextExtensions, 
+            IAccountServices accountServices, IAccountRepository accountRepository, 
+            IAuthorRepository authorRepository, IImageManagerServices imageManagerServices)
         {
+            _contextExtensions = contextExtensions;
+            _accountServices = accountServices;
             _accountRepository = accountRepository;
             _authorRepository = authorRepository;
             _imageManagerServices = imageManagerServices;
@@ -27,14 +31,14 @@ namespace OnlineLibrary.Areas.Author.Controllers
 
         public async Task<IActionResult> MyProfile()
         {
-            string authenticatedUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUser));
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
+            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId));
         }
 
         public async Task<IActionResult> Edit()
         {
-            string authenticatedUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUser));
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
+            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId));
         }
 
         [HttpPost]

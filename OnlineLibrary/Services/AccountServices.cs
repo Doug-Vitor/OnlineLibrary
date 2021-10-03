@@ -13,19 +13,24 @@ namespace OnlineLibrary.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly HttpContextExtensions _contextExtensions;
         private readonly IAccountRepository _accountRepository;
         private readonly IAppUserRepository _appUserRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly IShoppingCartRepository _cartRepository;
 
         public AccountServices(UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager, IAccountRepository accountRepository,
-            IAppUserRepository appUserRepository, IAuthorRepository authorRepository)
+            SignInManager<IdentityUser> signInManager, HttpContextExtensions contextExtensions,
+            IAccountRepository accountRepository,  IAppUserRepository appUserRepository, 
+            IAuthorRepository authorRepository, IShoppingCartRepository cartRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _contextExtensions = contextExtensions;
             _accountRepository = accountRepository;
             _appUserRepository = appUserRepository;
             _authorRepository = authorRepository;
+            _cartRepository = cartRepository;
         }
 
         [HttpPost]
@@ -39,7 +44,11 @@ namespace OnlineLibrary.Services
             {
                 await _userManager.AddToRoleAsync(user, "Default");
                 await _signInManager.SignInAsync(user, false);
-                await _appUserRepository.InsertAsync(new ApplicationUser(user));
+
+                ApplicationUser appUser = new(user);
+                await _appUserRepository.InsertAsync(appUser);
+                await _cartRepository.InsertAsync(new ShoppingCart() { BuyerId = appUser.Id });
+
                 return true;
             }
 
@@ -63,16 +72,16 @@ namespace OnlineLibrary.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task ChangeUserToAuthor(string authenticatedUserId, Author author)
+        public async Task ChangeUserToAuthor(Author author)
         {
-            ApplicationUser user = await _accountRepository.GetAuthenticatedUserByIdAsync(authenticatedUserId);
-            author.Purchases = user.Purchases;
-            author.IdentityUser = user.IdentityUser;
+            string userId = _contextExtensions.GetAuthenticatedUserId();
+            ApplicationUser user = await _accountRepository.GetAuthenticatedUserByIdAsync(userId);
+            author.UpdateFields(user.IdentityUser, user.ShoppingCart, user.Purchases);
 
             await _appUserRepository.RemoveAsync(user);
             await _authorRepository.InsertAsync(author);
 
-            IdentityUser identityUser = await _userManager.FindByIdAsync(authenticatedUserId);
+            IdentityUser identityUser = await _userManager.FindByIdAsync(userId);
             await _userManager.RemoveFromRoleAsync(identityUser, "Default");
             await _userManager.AddToRoleAsync(identityUser, "Author");
         }

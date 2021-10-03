@@ -318,6 +318,49 @@ namespace OnlineLibrary.Migrations
                     b.ToTable("PurchasesDetails");
                 });
 
+            modelBuilder.Entity("OnlineLibrary.Models.ShoppingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BuyerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyerId")
+                        .IsUnique();
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("OnlineLibrary.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartsItems");
+                });
+
             modelBuilder.Entity("OnlineLibrary.Models.Author", b =>
                 {
                     b.HasBaseType("OnlineLibrary.Models.ApplicationUser");
@@ -437,14 +480,47 @@ namespace OnlineLibrary.Migrations
                     b.Navigation("Purchase");
                 });
 
+            modelBuilder.Entity("OnlineLibrary.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("OnlineLibrary.Models.ApplicationUser", "Buyer")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("OnlineLibrary.Models.ShoppingCart", "BuyerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Buyer");
+                });
+
+            modelBuilder.Entity("OnlineLibrary.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("OnlineLibrary.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId");
+
+                    b.HasOne("OnlineLibrary.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ShoppingCartId");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("ShoppingCart");
+                });
+
             modelBuilder.Entity("OnlineLibrary.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Purchases");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Models.Purchase", b =>
                 {
                     b.Navigation("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("OnlineLibrary.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Models.Author", b =>

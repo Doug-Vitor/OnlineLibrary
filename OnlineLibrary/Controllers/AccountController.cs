@@ -77,8 +77,7 @@ namespace OnlineLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                string autheticatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _accountServices.ChangeUserToAuthor(autheticatedUserId, author);
+                await _accountServices.ChangeUserToAuthor(author);
                 return RedirectToAction(nameof(Index), "Home");
             }
 

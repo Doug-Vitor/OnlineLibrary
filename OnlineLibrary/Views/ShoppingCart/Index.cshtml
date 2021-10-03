@@ -1,0 +1,54 @@
+﻿@model ShoppingCart
+
+@{
+    ViewData["Title"] = "Seu carrinho";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <tbody>
+            @foreach (ShoppingCartItem shoppingCartItem in Model.ShoppingCartItems)
+            {
+            <tr>
+                <td class="text-left td">
+                    <h4>@shoppingCartItem.Book.Title</h4>
+                    <h5>@shoppingCartItem.Book.Author.FullName</h5>
+                </td>
+                <td class="text-center td">
+                    <a asp-action="DecreaseItemQuantity" asp-route-itemId="@shoppingCartItem.Id">
+                        <img src="~/Images/decrease-quantity.png" width="22" height="22" asp-append-version="true" />
+                    </a>
+                    Quantidade: @shoppingCartItem.Quantity
+                    <a asp-action="IncreaseItemQuantity" asp-route-itemId="@shoppingCartItem.Id">
+                        <img src="~/Images/increase-quantity.png" width="22" height="22" asp-append-version="true" />
+                    </a>
+                    <p>Preço unitário: @shoppingCartItem.Book.Price</p>
+                </td>
+                <td class="text-center td">
+                    <a class="btn btn-outline-danger rounded-pill" asp-action="RemoveItemFromCart" asp-route-itemId="@shoppingCartItem.Id">Remover</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="footer-infos">
+    <h4>Preço total: R$@Model.GetTotalPrice().ToString("C2")</h4>
+    <a class="btn btn-success">Confirmar compra</a>
+    <a class="btn btn-outline-dark" style="padding:9px;">Cancelar compra</a>
+</div>
+
+<style>
+    .td {
+        width:33%;
+    }
+    .footer-infos {
+        align-items:center;
+        justify-content:right;
+        float:right;
+        text-align:right;
+    }
+</style>

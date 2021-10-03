@@ -13,14 +13,13 @@ using System.Threading.Tasks;
 
 namespace OnlineLibrary.Repositories
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository : AbstractRepository, IBookRepository
     {
-        private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public BookRepository(AppDbContext context, IWebHostEnvironment hostEnvironment)
+            : base(context)
         {
-            _context = context;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -29,6 +28,18 @@ namespace OnlineLibrary.Repositories
             book.ImagePath = "~/Images/BookImages/Default.png";
             _context.Add(book);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Book> GetByIdAsync(int? id)
+        {
+            if (id is null)
+                throw new IdNotProvidedException("ID não informado.");
+
+            Book book = await _context.Books.Where(book => book.Id == id).FirstOrDefaultAsync();
+            if (book is null)
+                throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID fornecido.");
+
+            return book;
         }
 
         public async Task<IEnumerable<Book>> GetAllAsync(int? page)
