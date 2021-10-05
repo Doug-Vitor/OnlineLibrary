@@ -9,14 +9,11 @@ namespace OnlineLibrary.Services
     public class BookServices : IBookServices
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IShoppingCartItemsRepository _cartItemsRepository;
         private readonly IPurchaseRepository _purchaseRepository;
 
-        public BookServices(IBookRepository bookRepository, IShoppingCartItemsRepository cartItemsRepository,
-            IPurchaseRepository purchaseRepository)
+        public BookServices(IBookRepository bookRepository, IPurchaseRepository purchaseRepository)
         {
             _bookRepository = bookRepository;
-            _cartItemsRepository = cartItemsRepository;
             _purchaseRepository = purchaseRepository;
         }
 

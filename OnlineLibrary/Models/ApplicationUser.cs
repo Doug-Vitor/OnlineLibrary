@@ -6,8 +6,8 @@ namespace OnlineLibrary.Models
     public class ApplicationUser : Entity
     {
         public IdentityUser IdentityUser { get; protected set; }
-        public virtual ShoppingCart ShoppingCart { get; protected set; }
-        public virtual List<Purchase> Purchases { get; protected set; }
+        public virtual ShoppingCart ShoppingCart { get; internal protected set; }
+        public virtual List<Purchase> Purchases { get; internal protected set; }
 
         public ApplicationUser()
         {

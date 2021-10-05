@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Areas.ApplicationUser.ViewModels;
 using OnlineLibrary.Models.ViewModels;
+using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
 using System;
 using System.Diagnostics;
@@ -25,6 +26,10 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             try
             {
                 return View(new UserPurchaseViewModel(await _purchaseRepository.GetByIdAsync(id)));
+            }
+            catch (AccessDeniedException error)
+            {
+                return RedirectToAction("AccessDenied", "Home", new { area = "", message = error.Message });
             }
             catch (ApplicationException error)
             {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OnlineLibrary.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Data
@@ -20,18 +21,19 @@ namespace OnlineLibrary.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             string[] roles = { "Default", "Author" };
-            IdentityResult roleResult;
 
             foreach (string role in roles)
             {
                 bool roleExists = await roleManager.RoleExistsAsync(role);
-                if (!roleExists)
-                    roleResult = await roleManager.CreateAsync(new IdentityRole(role));
+                if (roleExists is false)
+                    await roleManager.CreateAsync(new IdentityRole(role));
             }
         }
 
         public void SeedDb()
         {
+            if (_context.ApplicationUsers.Any() || _context.Authors.Any() ||_context.Books.Any())
+                return;
         }
     }
 }

@@ -18,6 +18,11 @@ namespace OnlineLibrary.Repositories
             _contextExtensions = contextExtensions;   
         }
 
+        public void DetachEntity(ApplicationUser user)
+        {
+            _context.Entry(user).State = EntityState.Detached;
+        }
+
         public async Task<ApplicationUser> GetAuthenticatedUserAsync()
         {
             string authenticatedUserRole = _contextExtensions.GetAuthenticatedUserRole();
@@ -50,6 +55,13 @@ namespace OnlineLibrary.Repositories
             string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             return await _context.Authors.Where(user => user.IdentityUser.Id == authenticatedUserId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateToAuthorAsync(Author author)
+        {
+            _context.Update(author);
+            await _context.SaveChangesAsync();
+            await _context.Database.ExecuteSqlRawAsync($"UPDATE ApplicationUsers SET Discriminator = '{nameof(Author)}' WHERE Id = '{author.Id}'");
         }
     }
 }

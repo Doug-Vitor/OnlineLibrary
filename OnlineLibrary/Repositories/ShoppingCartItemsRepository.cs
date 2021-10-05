@@ -22,7 +22,8 @@ namespace OnlineLibrary.Repositories
         public async Task<IEnumerable<ShoppingCartItem>> GetAllAsync()
         {
             ShoppingCart cart = await _cartRepository.GetByAuthenticatedUserAsync();
-            return await _context.ShoppingCartsItems.Where(cart => cart.Id == cart.Id).ToListAsync();
+            return await _context.ShoppingCartsItems.Where(item => item.ShoppingCart.Id == cart.Id)
+                .Include(item => item.Book).ThenInclude(book => book.Author).ToListAsync();
         }
 
         public async Task InsertAsync(ShoppingCartItem cartItem)
@@ -32,18 +33,12 @@ namespace OnlineLibrary.Repositories
             await _context.SaveChangesAsync();
         }
 
-        private async Task<int> GetAuthenticatedUserShoppingCartId()
-        {
-            ShoppingCart shoppingCart = await _cartRepository.GetByAuthenticatedUserAsync();
-            return shoppingCart.Id;
-        }
-
         public async Task<ShoppingCartItem> GetByIdAsync(int? itemId)
         {
             if (itemId is null)
                 throw new IdNotProvidedException("ID não fornecido.");
 
-            int cartId = await GetAuthenticatedUserShoppingCartId();
+            int cartId = await _cartRepository.GetAuthenticatedUserShoppingCartId();
             return await _context.ShoppingCartsItems
                 .Where(item => item.Id == itemId && item.ShoppingCart.Id == cartId).FirstOrDefaultAsync();
         }
@@ -53,7 +48,7 @@ namespace OnlineLibrary.Repositories
             if (bookId is null)
                 throw new IdNotProvidedException("ID não fornecido.");
 
-            int cartId = await GetAuthenticatedUserShoppingCartId();
+            int cartId = await _cartRepository.GetAuthenticatedUserShoppingCartId();
             return await _context.ShoppingCartsItems
                 .Where(item => item.Book.Id == bookId && item.ShoppingCart.Id == cartId)
                 .FirstOrDefaultAsync();

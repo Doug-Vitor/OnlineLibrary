@@ -4,7 +4,6 @@ using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,7 +62,7 @@ namespace OnlineLibrary.Repositories
         {
             Author author = await GetByIdAsync(id);
             _context.Remove(author);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

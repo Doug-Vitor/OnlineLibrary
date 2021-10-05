@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OnlineLibrary.Extensions;
+using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System.Threading.Tasks;
@@ -12,17 +12,14 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
     [Authorize(Roles="Author")]
     public class AccountController : Controller
     {
-        private readonly IAccountServices _accountServices;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public AccountController( IAccountServices accountServices, IAccountRepository accountRepository, 
-            IAuthorRepository authorRepository, IBookRepository bookRepository,
-            IImageManagerServices imageManagerServices)
+        public AccountController(IAccountRepository accountRepository, IAuthorRepository authorRepository, 
+            IBookRepository bookRepository, IImageManagerServices imageManagerServices)
         {
-            _accountServices = accountServices;
             _accountRepository = accountRepository;
             _authorRepository = authorRepository;
             _bookRepository = bookRepository;
@@ -45,7 +42,8 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(OnlineLibrary.Models.Author author, IFormFile imageFile)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Author author, IFormFile imageFile)
         {
             string imageUploadResult = await _imageManagerServices.UploadProfileImageAsync(imageFile, author.Id);
 

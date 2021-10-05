@@ -5,7 +5,6 @@ using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Services.Interfaces;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -73,6 +72,7 @@ namespace OnlineLibrary.Controllers
 
         [Authorize(Roles = "Default")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUserToAuthor(Author author)
         {
             if (ModelState.IsValid)

@@ -14,6 +14,11 @@ namespace OnlineLibrary.Models
         {
         }
 
+        public ShoppingCart(ApplicationUser buyer)
+        {
+            Buyer = buyer;
+        }
+
         public string GetTotalPrice()
         {
             return ShoppingCartItems.Select(prop => prop.Book.Price * prop.Quantity).Sum()

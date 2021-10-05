@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
 {
-    public class BooksController : Controller
+    public class BooksController : Controller   
     {
         private readonly IBookRepository _bookRepository;
 
@@ -58,17 +58,24 @@ namespace OnlineLibrary.Controllers
 
         public async Task<IActionResult> GetByGenre(int enumValue, int? page)
         {
-            var genreName = EnumExtensions.GetDisplayName((Genre)enumValue);
-            return View(new BookViewModel("Livros por gênero", $"Resultados para: {genreName}", 
-                page ?? 1, await _bookRepository.GetPageCountAsync(),
-                await _bookRepository.GetByGenre(enumValue, page)));
+            try
+            {
+                var genreName = EnumExtensions.GetDisplayName((Genre)enumValue);
+                return View(new BookViewModel("Livros por gênero", $"Resultados para: {genreName}",
+                    page ?? 1, await _bookRepository.GetPageCountAsync(),
+                    await _bookRepository.GetByGenre(enumValue, page)));
+            }
+            catch (InvalidOperationException)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Não existe nenhum gênero correspondente ao valor fornecido." });
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
         {
             try
             {
-                return View(await _bookRepository.GetAuthorByIdAsync(id));
+                return View(await _bookRepository.GetByIdAsync(id));
             }
             catch (ApplicationException error)
             {

@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OnlineLibrary.Data;
 using System;
 
-namespace OnlineLibrary.Extensions
+namespace OnlineLibrary.Data.Extensions
 {
     public static class IHostExtensions
     {

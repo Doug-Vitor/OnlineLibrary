@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace OnlineLibrary.Repositories.Interfaces
+namespace OnlineLibrary.Services.Interfaces
 {
     public interface IPurchaseServices
     {
-        Task SetCartItemsToPurchase();
+        Task ConvertCartItemsToPurchase();
     }
 }

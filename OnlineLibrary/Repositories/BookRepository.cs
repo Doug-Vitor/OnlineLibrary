@@ -53,12 +53,12 @@ namespace OnlineLibrary.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Book> GetAuthorByIdAsync(int? id)
+        public async Task<Book> GetByAuthorIdAsync(int? authorId)
         {
             if (id is null)
                 throw new IdNotProvidedException("ID não informado");
 
-            Book book = await _context.Books.Where(bk => bk.Id == id).Include(bk => bk.Author)
+            Book book = await _context.Books.Where(book => book.Author.Id == id).Include(bk => bk.Author)
                 .FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID informado.");
@@ -139,7 +139,7 @@ namespace OnlineLibrary.Repositories
         {
             try
             {
-                Book book = await GetAuthorByIdAsync(id);
+                Book book = await GetByIdAsync(id);
                 _context.Remove(book);
                 await _context.SaveChangesAsync();
             }

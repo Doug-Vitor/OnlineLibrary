@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
 {
+    [Authorize]
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartServices _cartServices;
@@ -25,6 +27,7 @@ namespace OnlineLibrary.Controllers
             _purchaseServices = purchaseServices;
         }
 
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Index()
         {
             return View(await _cartRepository.GetByAuthenticatedUserAsync());
@@ -61,16 +64,7 @@ namespace OnlineLibrary.Controllers
 
         public async Task<RedirectToActionResult> DecreaseItemQuantity(int itemId)
         {
-            try
-            {
-                await _cartServices.DecreaseItemQuantityAsync(itemId);
-            }
-            catch (ApplicationException error)
-            {
-
-                return RedirectToAction(nameof(Error), new { message = error.Message });
-            }
-
+            await _cartServices.DecreaseItemQuantityAsync(itemId);
             return RedirectToAction(nameof(Index));
         }
 
@@ -87,7 +81,7 @@ namespace OnlineLibrary.Controllers
 
         public async Task<RedirectToActionResult> ConfirmPurchase()
         {
-            await _purchaseServices.SetCartItemsToPurchase();
+            await _purchaseServices.ConvertCartItemsToPurchase();
             return RedirectToAction(nameof(Index), "Home", new { area = "ApplicationUser" });
         }
 
@@ -97,6 +91,7 @@ namespace OnlineLibrary.Controllers
             return RedirectToAction(nameof(Index), "Home");
         }
 
+        [IgnoreAntiforgeryToken]
         public IActionResult Error(string message)
         {
             string requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;

@@ -37,12 +37,13 @@ namespace OnlineLibrary.Models
             ShortBiography = shortBiography;
         }
 
-        public void UpdateFields(IdentityUser identityUser, ShoppingCart shoppingCart,
-            List<Purchase> purchases)
+        public void ChangeToAuthor(ApplicationUser user)
         {
-            IdentityUser = identityUser;
-            ShoppingCart = shoppingCart;
-            Purchases = purchases;
+            Id = user.Id;
+            IdentityUser = user.IdentityUser;
+            ImagePath = "~/Images/ProfilePhotos/Default.png";
+            ShoppingCart = user.ShoppingCart;
+            Purchases = user.Purchases;
         }
     }
 }

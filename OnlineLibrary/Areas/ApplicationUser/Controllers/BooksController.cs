@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Areas.ApplicationUser.ViewModels;
-using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
@@ -18,16 +17,13 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
     public class BooksController : Controller
     {
         private readonly IBookRepository _bookRepository;
-        private readonly HttpContextExtensions _contextExtensions;
         private readonly IAccountRepository _accountRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public BooksController(IBookRepository bookRepository, 
-            HttpContextExtensions contextExtensions, 
-            IAccountRepository accountRepository,  IImageManagerServices imageManagerServices)
+        public BooksController(IBookRepository bookRepository, IAccountRepository accountRepository,
+            IImageManagerServices imageManagerServices)
         {
             _bookRepository = bookRepository;
-            _contextExtensions = contextExtensions;
             _accountRepository = accountRepository;
             _imageManagerServices = imageManagerServices;
         }
@@ -39,6 +35,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Book book, IFormFile imageFile)
         {
             if (ModelState.IsValid)
@@ -47,7 +44,6 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             return View(new BookInputViewModel(
                 await _accountRepository.GetAuthenticatedUserAsync() as Author, book));
         }
@@ -56,7 +52,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         {
             try
             {
-                return View(await _bookRepository.GetAuthorByIdAsync(id));
+                return View(await _bookRepository.GetByIdAsync(id));
             }
             catch (ApplicationException error)
             {
@@ -65,6 +61,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Book book, IFormFile imageFile)
         {
             string imageUploadResult = await _imageManagerServices.UploadBookImageAsync(imageFile, book.Id);
@@ -88,7 +85,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         {
             try
             {
-                return View(await _bookRepository.GetAuthorByIdAsync(id));
+                return View(await _bookRepository.GetByIdAsync(id));
             }
             catch (ApplicationException error)
             {
@@ -97,6 +94,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(int id)
         {
             try

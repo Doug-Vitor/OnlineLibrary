@@ -7,5 +7,6 @@ namespace OnlineLibrary.Repositories.Interfaces
     {
         Task InsertAsync(ShoppingCart shoppingCart);
         Task<ShoppingCart> GetByAuthenticatedUserAsync();
+        Task<int> GetAuthenticatedUserShoppingCartId();
     }
 }

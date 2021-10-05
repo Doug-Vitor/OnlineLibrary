@@ -41,6 +41,7 @@ namespace OnlineLibrary
 
             services.AddScoped<SeedingServices>();
 
+            services.AddScoped<IIdentityServices, IdentityServices>();
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();

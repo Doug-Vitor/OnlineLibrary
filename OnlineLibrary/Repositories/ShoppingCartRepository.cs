@@ -32,5 +32,11 @@ namespace OnlineLibrary.Repositories
                 .Include(cart => cart.ShoppingCartItems).ThenInclude(item => item.Book)
                 .ThenInclude(book => book.Author).FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetAuthenticatedUserShoppingCartId()
+        {
+            ShoppingCart shoppingCart = await GetByAuthenticatedUserAsync();
+            return shoppingCart.Id;
+        }
     }
 }

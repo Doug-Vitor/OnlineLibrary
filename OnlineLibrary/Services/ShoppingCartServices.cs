@@ -9,14 +9,22 @@ namespace OnlineLibrary.Services
 {
     public class ShoppingCartServices : IShoppingCartServices
     {
+        private readonly IShoppingCartRepository _cartRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IShoppingCartItemsRepository _cartItemsRepository;
 
-        public ShoppingCartServices(IBookRepository bookRepository,
+        public ShoppingCartServices(IShoppingCartRepository cartRepository, IBookRepository bookRepository,
             IShoppingCartItemsRepository cartItemsRepository)
         {
+            _cartRepository = cartRepository;
             _bookRepository = bookRepository;
             _cartItemsRepository = cartItemsRepository;
+        }
+
+        public async Task CreateCartAsync(ApplicationUser buyer)
+        {
+            ShoppingCart shoppingCart = new(buyer);
+            await _cartRepository.InsertAsync(shoppingCart);
         }
 
         public async Task AddItemToCartAsync(int bookId)

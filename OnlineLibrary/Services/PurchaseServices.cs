@@ -1,5 +1,6 @@
 ﻿using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
+using OnlineLibrary.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace OnlineLibrary.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task SetCartItemsToPurchase()
+        public async Task ConvertCartItemsToPurchase()
         {
             IEnumerable<ShoppingCartItem> cartItems = await _cartItemsRepository.GetAllAsync();
             Purchase purchase = new();
