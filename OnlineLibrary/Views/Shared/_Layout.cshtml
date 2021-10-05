@@ -35,14 +35,12 @@
                                 <a class="nav-link active" asp-controller="Account" asp-action="ChangeUserToAuthor">Quero ser autor</a>
                             </li>
                         }
-                        @if (User.IsInRole("Author"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="Author" asp-controller="Home" asp-action="Index">Minha área</a>
-                            </li>
-                        }
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-area="ApplicationUser" asp-controller="Home" asp-action="Index">Minha área</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link active" asp-controller="Account" asp-action="SignOut">Sair</a>
                             </li>

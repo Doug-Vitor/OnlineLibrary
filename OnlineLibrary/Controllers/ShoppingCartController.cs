@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Diagnostics;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -14,11 +12,17 @@ namespace OnlineLibrary.Controllers
     {
         private readonly IShoppingCartServices _cartServices;
         private readonly IShoppingCartRepository _cartRepository;
+        private readonly IShoppingCartItemsRepository _cartItemsRepository;
+        private readonly IPurchaseServices _purchaseServices;
 
-        public ShoppingCartController(IShoppingCartRepository cartRepository, IShoppingCartServices cartServices)
+        public ShoppingCartController(IShoppingCartRepository cartRepository, 
+            IShoppingCartServices cartServices, IShoppingCartItemsRepository cartItemsRepository,
+            IPurchaseServices purchaseServices)
         {
             _cartServices = cartServices;
             _cartRepository = cartRepository;
+            _cartItemsRepository = cartItemsRepository;
+            _purchaseServices = purchaseServices;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +78,23 @@ namespace OnlineLibrary.Controllers
         {
             await _cartServices.RemoveItemFromCartAsync(itemId);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Checkout()
+        {
+            return View(new CheckoutViewModel(await _cartItemsRepository.GetAllAsync()));
+        }
+
+        public async Task<RedirectToActionResult> ConfirmPurchase()
+        {
+            await _purchaseServices.SetCartItemsToPurchase();
+            return RedirectToAction(nameof(Index), "Home", new { area = "ApplicationUser" });
+        }
+
+        public async Task<RedirectToActionResult> CancelCart()
+        {
+            await _cartServices.CancelCartAsync();
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         public IActionResult Error(string message)

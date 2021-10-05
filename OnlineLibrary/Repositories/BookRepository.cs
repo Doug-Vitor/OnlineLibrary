@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
+using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
 using OnlineLibrary.Models.Enums;
 using OnlineLibrary.Repositories.Exceptions;
@@ -15,11 +16,14 @@ namespace OnlineLibrary.Repositories
 {
     public class BookRepository : AbstractRepository, IBookRepository
     {
+        private readonly HttpContextExtensions _contextExtensions;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public BookRepository(AppDbContext context, IWebHostEnvironment hostEnvironment)
+        public BookRepository(AppDbContext context, HttpContextExtensions contextExtensions,
+            IWebHostEnvironment hostEnvironment)
             : base(context)
         {
+            _contextExtensions = contextExtensions;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -72,10 +76,11 @@ namespace OnlineLibrary.Repositories
                 .Skip(booksToSkip).Take(15).ToListAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync(string authorUserName)
+        public async Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync()
         {
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
             return await _context.Books
-                .Where(bk => bk.Author.IdentityUser.UserName == authorUserName).ToListAsync();
+                .Where(bk => bk.Author.IdentityUser.Id == authenticatedUserId).ToListAsync();
         }
 
         public async Task<IEnumerable<Book>> FindByTitleAsync(string title, int? page)

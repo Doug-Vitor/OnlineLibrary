@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace OnlineLibrary.Models
@@ -13,9 +14,10 @@ namespace OnlineLibrary.Models
         {
         }
 
-        public double GetTotalPrice()
+        public string GetTotalPrice()
         {
-            return ShoppingCartItems.Select(prop => prop.Book.Price * prop.Quantity).Sum();
+            return ShoppingCartItems.Select(prop => prop.Book.Price * prop.Quantity).Sum()
+                .ToString("C2", CultureInfo.CurrentCulture);
         }
     }
 }

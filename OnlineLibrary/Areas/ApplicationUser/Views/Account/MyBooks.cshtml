@@ -1,5 +1,17 @@
 ﻿@model IEnumerable<Book>
 
+@{
+    ViewData["Title"] = "Todos os seus livros";
+}
+
+<div class="div-elements">
+    <h3 style="text-align:center">@ViewData["Title"]</h3>
+</div>
+
+<div>
+    <a class="btn btn-success" asp-controller="Books" asp-action="Create">Criar novo</a>
+</div>
+
 <div class="row">
     @foreach (Book book in Model)
     {
@@ -8,9 +20,6 @@
                 <img src="@book.ImagePath" width="125" height="125" loading="lazy" asp-append-version="true" />
             </div>
             <h4 style="padding-top:20px">@book.Title</h4>
-
-            <wbr />
-            <h5>por @book.Author.FullName</h5>
 
             <div class="book-infos">
                 <div class="left-line">
@@ -23,9 +32,6 @@
 
             <div class="book-infos">
                 <div class="book-buttons">
-                    <a asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@book.Id">
-                        <img src="~/Images/add-to-cart.png" width="40" height="40" asp-append-version="true" />
-                    </a>
                     <a class="btn btn-info" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalhes</a>
                 </div>
             </div>
@@ -35,9 +41,10 @@
 
 <style>
     .row {
-        align-items:center;
+        align-items: center;
         justify-content: center;
     }
+
     .books-column {
         justify-content: center;
         margin: 0 auto;
@@ -45,16 +52,19 @@
     }
 
     .book-infos {
-        display:flex;
-        align-items:center;
+        display: flex;
+        align-items: center;
     }
+
     .left-line {
         text-align: left;
     }
+
     .right-line {
         text-align: right;
     }
+
     .book-infos {
-        float:right;
+        float: right;
     }
 </style>

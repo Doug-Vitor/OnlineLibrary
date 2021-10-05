@@ -1,0 +1,33 @@
+﻿@model UserPurchaseViewModel
+
+@{
+    ViewData["Title"] = "Todos as suas compras";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="row">
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th>Nº da compra</th>
+                <th>Quantidade de livros</th>
+                <th>Total (em R$)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                @foreach (Purchase purchase in Model.Purchases)
+                {
+                    <td>@purchase.Id</td>
+                    <td>@purchase.PurchaseDetails.Count</td>
+                    <td>@Model.GetTotalPrice()</td>
+                    <td>
+                        <a class="text-dark" asp-controller="Purchases" asp-action="Details" asp-route-id="@purchase.Id">Detalhes</a>
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>

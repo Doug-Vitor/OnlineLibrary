@@ -1,6 +1,6 @@
 ﻿using OnlineLibrary.Models;
 
-namespace OnlineLibrary.Areas.Author.Models
+namespace OnlineLibrary.Areas.ApplicationUser.ViewModels
 {
     public class BookInputViewModel
     {

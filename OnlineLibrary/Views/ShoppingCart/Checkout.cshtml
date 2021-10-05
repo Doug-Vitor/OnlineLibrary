@@ -1,0 +1,46 @@
+﻿@model CheckoutViewModel
+
+@{ 
+    ViewData["Title"] = "Confirmar compra";
+}
+
+<h3>@ViewData["Title"]</h3>
+<h4>Confirme os dados do pedido antes de continuar.</h4>
+
+<div class="row">
+    @foreach (ShoppingCartItem cartItem in Model.ShoppingCartItems)
+    {
+        <div class="book-column col-4">
+            <div>
+                <h4>@cartItem.Book.Title</h4>
+                <h5>Por: @cartItem.Book.Author.FullName</h5>
+                <h5>@cartItem.Book.Genre.GetDisplayName()</h5>
+                <h5 style="text-align:right">@cartItem.Quantity unidades</h5>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="footer-buttons">
+    <h5>Preço total: @Model.GetTotalPrice()</h5>
+    <a class="btn btn-success" asp-action="ConfirmPurchase">Confirmar</a>
+    <a class="btn btn-info" asp-action="Index">Editar</a>
+</div>
+
+<style>
+    .row {
+        align-items:center;
+        justify-content:center;
+    }
+    .book-column {
+        justify-content:center;
+        padding:25px 15px;
+        display:inline-flex;
+    }
+    .footer-buttons {
+        align-items: center;
+        justify-content: right;
+        float: right;
+        text-align: right;
+    }
+</style>

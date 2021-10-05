@@ -4,13 +4,13 @@
     ViewData["Title"] = Model.CurrentFilter;
 }
 
-<div class="topContent">
-    <div class="divElements titleContent">
+<div class="top-content">
+    <div class="div-elements title-content">
         <h3>@ViewData["Title"]</h3>
     </div>
 
     <form>
-        <div class="form-group divElements">
+        <div class="form-group div-elements">
             <input type="text" class="form-control" style="text-align:right" placeholder="Pesquisar" name="searchString" />
             <input type="submit" class="btn btn-success" value="Pesquisar por título" asp-action="FindByTitle" />
             <input type="submit" class="btn btn-success" value="Pesquisar por autor" asp-action="FindByAuthor" />
@@ -18,9 +18,7 @@
     </form>
 </div>
 
-<div class="row">
-    <partial name="_BooksPartial" for="Books" />
-</div>
+<partial name="_BooksPartial" for="Books" />
 
 @if (Model.PageCount > 1)
 {
@@ -34,17 +32,17 @@
 }
 
 <style>
-    .topContent {
+    .top-content {
         display:flex;
         justify-content:center;
         align-items:center;
     }
 
-    .titleContent {
+    .title-content {
         max-width: 420px;
     }
 
-    .divElements {
+    .div-elements {
         padding:40px
     }
 </style>

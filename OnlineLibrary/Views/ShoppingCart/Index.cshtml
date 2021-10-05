@@ -36,9 +36,12 @@
 </div>
 
 <div class="footer-infos">
-    <h4>Preço total: R$@Model.GetTotalPrice().ToString("C2")</h4>
-    <a class="btn btn-success">Confirmar compra</a>
-    <a class="btn btn-outline-dark" style="padding:9px;">Cancelar compra</a>
+    <h5>Preço total: @Model.GetTotalPrice()</h5>
+    @if (Model.ShoppingCartItems.Count > 0)
+    {
+        <a class="btn btn-success" asp-action="Checkout">Confirmar compra</a>
+    }
+    <a class="btn btn-outline-dark" style="padding:9px;" asp-action="CancelCart">Cancelar compra</a>
 </div>
 
 <style>

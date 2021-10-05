@@ -47,12 +47,16 @@ namespace OnlineLibrary
 
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IBookServices, BookServices>();
 
             services.AddScoped<IImageManagerServices, ImageManagerServices>();
 
             services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<IShoppingCartServices, ShoppingCartServices>();
             services.AddScoped<IShoppingCartItemsRepository, ShoppingCartItemsRepository>();
+
+            services.AddScoped<IPurchaseServices, PurchaseServices>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,8 +93,9 @@ namespace OnlineLibrary
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(
-                    name: "AreaAuthor",
+                    name: "AreaApplicationUser",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

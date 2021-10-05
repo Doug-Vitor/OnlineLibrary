@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
+using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
 using System.Linq;
@@ -9,21 +10,45 @@ namespace OnlineLibrary.Repositories
 {
     public class AccountRepository : AbstractRepository, IAccountRepository
     {
-        public AccountRepository(AppDbContext context) : base(context)
+        private readonly HttpContextExtensions _contextExtensions;
+
+        public AccountRepository(AppDbContext context, HttpContextExtensions contextExtensions) 
+            : base(context)
         {
+            _contextExtensions = contextExtensions;   
         }
 
-        public async Task<ApplicationUser> GetAuthenticatedUserByIdAsync(string identityUserId)
+        public async Task<ApplicationUser> GetAuthenticatedUserAsync()
         {
+            string authenticatedUserRole = _contextExtensions.GetAuthenticatedUserRole();
+
+            ApplicationUser user = null;
+            switch (authenticatedUserRole)
+            {
+                case "Default":
+                    user = await GetAuthenticatedApplicationUserAsync();
+                    break;
+                case "Author":
+                    user = await GetAuthenticatedAuthorAsync();
+                    break;
+            }
+
+            return user;
+        }
+
+        private async Task<ApplicationUser> GetAuthenticatedApplicationUserAsync()
+        {
+            string userId = _contextExtensions.GetAuthenticatedUserId();
             return await _context.ApplicationUsers
-                .Where(user => user.IdentityUser.Id == identityUserId)
+                .Where(user => user.IdentityUser.Id == userId)
                 .Include(user => user.IdentityUser).Include(user => user.ShoppingCart)
                 .Include(user => user.Purchases).FirstOrDefaultAsync();
         }
 
-        public async Task<Author> GetAuthenticatedAuthorByIdAsync(string identityUserId)
+        private async Task<Author> GetAuthenticatedAuthorAsync()
         {
-            return await _context.Authors.Where(user => user.IdentityUser.Id == identityUserId)
+            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
+            return await _context.Authors.Where(user => user.IdentityUser.Id == authenticatedUserId)
                 .FirstOrDefaultAsync();
         }
     }

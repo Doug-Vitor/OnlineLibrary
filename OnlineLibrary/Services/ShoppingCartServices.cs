@@ -1,6 +1,8 @@
 ﻿using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Services
@@ -53,6 +55,12 @@ namespace OnlineLibrary.Services
         public async Task RemoveItemFromCartAsync(int itemId)
         {
             await _cartItemsRepository.RemoveAsync(itemId);
+        }
+
+        public async Task CancelCartAsync()
+        {
+            IEnumerable<ShoppingCartItem> cartItems = await _cartItemsRepository.GetAllAsync();
+            await _cartItemsRepository.RemoveRangeAsync(cartItems.ToArray());
         }
     }
 }

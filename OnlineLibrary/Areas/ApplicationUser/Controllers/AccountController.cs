@@ -6,39 +6,42 @@ using OnlineLibrary.Repositories.Interfaces;
 using OnlineLibrary.Services.Interfaces;
 using System.Threading.Tasks;
 
-namespace OnlineLibrary.Areas.Author.Controllers
+namespace OnlineLibrary.Areas.ApplicationUser.Controllers
 {
-    [Area("Author")]
+    [Area("ApplicationUser")]
     [Authorize(Roles="Author")]
     public class AccountController : Controller
     {
-        private readonly HttpContextExtensions _contextExtensions;
         private readonly IAccountServices _accountServices;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly IBookRepository _bookRepository;
         private readonly IImageManagerServices _imageManagerServices;
 
-        public AccountController(HttpContextExtensions contextExtensions, 
-            IAccountServices accountServices, IAccountRepository accountRepository, 
-            IAuthorRepository authorRepository, IImageManagerServices imageManagerServices)
+        public AccountController( IAccountServices accountServices, IAccountRepository accountRepository, 
+            IAuthorRepository authorRepository, IBookRepository bookRepository,
+            IImageManagerServices imageManagerServices)
         {
-            _contextExtensions = contextExtensions;
             _accountServices = accountServices;
             _accountRepository = accountRepository;
             _authorRepository = authorRepository;
+            _bookRepository = bookRepository;
             _imageManagerServices = imageManagerServices;
         }
 
         public async Task<IActionResult> MyProfile()
         {
-            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
-            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId));
+            return View(await _accountRepository.GetAuthenticatedUserAsync());
+        }
+        
+        public async Task<IActionResult> MyBooks()
+        {
+            return View(await _bookRepository.GetByAuthorAuthenticatedAsync());
         }
 
         public async Task<IActionResult> Edit()
         {
-            string authenticatedUserId = _contextExtensions.GetAuthenticatedUserId();
-            return View(await _accountRepository.GetAuthenticatedAuthorByIdAsync(authenticatedUserId));
+            return View(await _accountRepository.GetAuthenticatedUserAsync());
         }
 
         [HttpPost]

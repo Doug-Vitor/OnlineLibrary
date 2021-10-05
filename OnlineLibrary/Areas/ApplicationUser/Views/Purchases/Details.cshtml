@@ -1,0 +1,41 @@
+﻿@model UserPurchaseViewModel
+
+@{ 
+    ViewData["Title"] = "Detalhes da sua compra: livros";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="container">
+    @for (int itemsCount = 0; itemsCount < Model.Purchase.PurchaseDetails.Count; itemsCount++)
+    {
+        <div class="item-row">
+            <div class="item-infos">
+                <label class="col-form-label" asp-for="Purchase.PurchaseDetails.First().Book.Title"></label>
+                <input class="form-control" readonly="" asp-for="Purchase.PurchaseDetails[itemsCount].Book.Title" />
+            </div>
+            <div class="item-infos">
+                <label class="col-form-label" asp-for="Purchase.PurchaseDetails.First().Book.Author"></label>
+                <input class="form-control" readonly="" asp-for="Purchase.PurchaseDetails[itemsCount].Book.Author.FullName" />
+            </div>
+            <div class="item-infos">
+                <label class="col-form-label" asp-for="Purchase.PurchaseDetails.First().Book.Price"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">R$</span>
+                    <input type="text" class="form-control" asp-for="Purchase.PurchaseDetails[itemsCount].Book.Price">
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h5 style="text-align:right;padding:20px;">Preço total: @Model.GetTotalPrice()</h5>
+
+<style>
+    .item-row {
+        display:flex;
+    }
+    .item-infos {
+        display:inline-block
+    }
+</style>

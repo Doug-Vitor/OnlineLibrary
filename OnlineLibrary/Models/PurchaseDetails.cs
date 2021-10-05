@@ -13,6 +13,12 @@
         {
         }
 
+        public PurchaseDetails(Book book, int quantity)
+        {
+            Book = book;
+            Quantity = quantity;
+        }
+
         public double GetTotalPrice()
         {
             return Book.Price * Quantity;

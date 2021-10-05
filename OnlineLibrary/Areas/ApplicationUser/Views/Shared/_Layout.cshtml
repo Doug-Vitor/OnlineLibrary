@@ -21,17 +21,20 @@
                             <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Retornar ao site</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" asp-area="Author" asp-controller="Home" asp-action="Index">Início</a>
+                            <a class="nav-link active" asp-area="ApplicationUser" asp-controller="Home" asp-action="Index">Início</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" asp-area="Author" asp-controller="Account" asp-action="MyProfile">Meu perfil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" asp-area="Author" asp-controller="Books" asp-action="Create">Novo livro  </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-controller="Account" asp-action="SignOut">Sair</a>
-                        </li>
+                        @if (User.IsInRole("Author"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-area="ApplicationUser" asp-controller="Account" asp-action="MyProfile">Meu perfil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-area="ApplicationUser" asp-controller="Books" asp-action="Create">Novo livro  </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-area="" asp-controller="Account" asp-action="SignOut">Sair</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

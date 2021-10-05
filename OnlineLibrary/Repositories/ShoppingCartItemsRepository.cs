@@ -3,6 +3,7 @@ using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,12 @@ namespace OnlineLibrary.Repositories
             : base(context)
         {
             _cartRepository = cartRepository;
+        }
+
+        public async Task<IEnumerable<ShoppingCartItem>> GetAllAsync()
+        {
+            ShoppingCart cart = await _cartRepository.GetByAuthenticatedUserAsync();
+            return await _context.ShoppingCartsItems.Where(cart => cart.Id == cart.Id).ToListAsync();
         }
 
         public async Task InsertAsync(ShoppingCartItem cartItem)
@@ -62,6 +69,15 @@ namespace OnlineLibrary.Repositories
         {
             ShoppingCartItem cartItem = await GetByIdAsync(itemId);
             _context.Remove(cartItem);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveRangeAsync(ShoppingCartItem[] cartItems)
+        {
+            if (cartItems is null)
+                return;
+
+            _context.RemoveRange(cartItems);
             await _context.SaveChangesAsync();
         }
     }

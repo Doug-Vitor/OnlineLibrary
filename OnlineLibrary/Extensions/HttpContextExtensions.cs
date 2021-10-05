@@ -12,6 +12,11 @@ namespace OnlineLibrary.Extensions
             _contextAccessor = contextAccessor;
         }
 
+        public string GetAuthenticatedUserRole()
+        {
+            return _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+        }
+
         public string GetAuthenticatedUserId()
         {
             return _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

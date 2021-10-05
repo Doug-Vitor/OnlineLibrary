@@ -75,7 +75,7 @@ namespace OnlineLibrary.Services
         public async Task ChangeUserToAuthor(Author author)
         {
             string userId = _contextExtensions.GetAuthenticatedUserId();
-            ApplicationUser user = await _accountRepository.GetAuthenticatedUserByIdAsync(userId);
+            ApplicationUser user = await _accountRepository.GetAuthenticatedUserAsync();
             author.UpdateFields(user.IdentityUser, user.ShoppingCart, user.Purchases);
 
             await _appUserRepository.RemoveAsync(user);

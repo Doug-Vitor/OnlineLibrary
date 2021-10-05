@@ -8,5 +8,6 @@ namespace OnlineLibrary.Services.Interfaces
         Task IncreaseItemQuantityAsync(int itemId);
         Task RemoveItemFromCartAsync(int itemId);
         Task DecreaseItemQuantityAsync(int itemId);
+        Task CancelCartAsync();
     }
 }
