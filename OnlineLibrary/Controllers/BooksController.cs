@@ -6,7 +6,6 @@ using OnlineLibrary.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -22,8 +21,9 @@ namespace OnlineLibrary.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            return View(new BookViewModel("Todos os livros", page ?? 1, 
-                await _bookRepository.GetPageCountAsync(), await _bookRepository.GetAllAsync(page)));
+            BookViewModel viewModel = new("Todos os livros", page ?? 1, await _bookRepository.GetPageCountAsync(),
+                 await _bookRepository.GetAllAsync(page));
+            return View(viewModel);
         }
 
         public async Task<IActionResult> FindByTitle(string searchString, int? page)

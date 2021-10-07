@@ -7,7 +7,7 @@ namespace OnlineLibrary.Models
     public class Book : Entity
     {
         [Required(ErrorMessage = "Campo {0} é obrigatório.")]
-        [StringLength(40, MinimumLength = 6, ErrorMessage = "Campo {0} deve conter entre {2} e {1} caracteres.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Campo {0} deve conter entre {2} e {1} caracteres.")]
         [DisplayName("Título")]
         public string Title { get; set; }
 
@@ -15,7 +15,7 @@ namespace OnlineLibrary.Models
         [DisplayName("Departamento/Gênero")]
         public Genre Genre { get; set; }
 
-        [StringLength(200, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
+        [StringLength(400, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
         [DisplayName("Resumo")]
         public string Summary { get; set; }
 
@@ -32,6 +32,15 @@ namespace OnlineLibrary.Models
 
         public Book()
         {
+        }
+
+        public Book(string title, Genre genre, string summary, double price, Author author)
+        {
+            Title = title;
+            Genre = genre;
+            Summary = summary;
+            Price = price;
+            Author = author;
         }
     }
 }

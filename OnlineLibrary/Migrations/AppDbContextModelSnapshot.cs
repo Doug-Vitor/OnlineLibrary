@@ -258,13 +258,13 @@ namespace OnlineLibrary.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Summary")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -377,8 +377,8 @@ namespace OnlineLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortBiography")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.HasDiscriminator().HasValue("Author");
                 });
@@ -456,9 +456,11 @@ namespace OnlineLibrary.Migrations
 
             modelBuilder.Entity("OnlineLibrary.Models.Purchase", b =>
                 {
-                    b.HasOne("OnlineLibrary.Models.ApplicationUser", null)
+                    b.HasOne("OnlineLibrary.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Purchases")
                         .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("OnlineLibrary.Models.PurchaseDetails", b =>

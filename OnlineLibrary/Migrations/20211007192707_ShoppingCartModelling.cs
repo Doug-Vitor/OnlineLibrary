@@ -6,6 +6,38 @@ namespace OnlineLibrary.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<string>(
+                name: "Title",
+                table: "Books",
+                type: "nvarchar(100)",
+                maxLength: 100,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(40)",
+                oldMaxLength: 40);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Summary",
+                table: "Books",
+                type: "nvarchar(400)",
+                maxLength: 400,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(200)",
+                oldMaxLength: 200,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ShortBiography",
+                table: "ApplicationUsers",
+                type: "nvarchar(400)",
+                maxLength: 400,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(200)",
+                oldMaxLength: 200,
+                oldNullable: true);
+
             migrationBuilder.CreateTable(
                 name: "ShoppingCarts",
                 columns: table => new
@@ -76,6 +108,38 @@ namespace OnlineLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShoppingCarts");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Title",
+                table: "Books",
+                type: "nvarchar(40)",
+                maxLength: 40,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(100)",
+                oldMaxLength: 100);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Summary",
+                table: "Books",
+                type: "nvarchar(200)",
+                maxLength: 200,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(400)",
+                oldMaxLength: 400,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ShortBiography",
+                table: "ApplicationUsers",
+                type: "nvarchar(200)",
+                maxLength: 200,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(400)",
+                oldMaxLength: 400,
+                oldNullable: true);
         }
     }
 }

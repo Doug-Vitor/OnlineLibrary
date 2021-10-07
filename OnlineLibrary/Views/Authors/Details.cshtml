@@ -11,7 +11,7 @@
     <div class="left-div">
         <img src="@Model.ImagePath" width="390" height="390" asp-append-version="true" />
 
-        <div>
+        <div style="padding-top:15px;">
             <label class="h4">Biografia</label>
             @if (string.IsNullOrWhiteSpace(Model.ShortBiography))
             {
@@ -19,7 +19,7 @@
             }
             else
             {
-                <p class="col-form-label" asp-for="ShortBiography"></p>
+                <p class="col-form-label">@Model.ShortBiography</p>
             }
         </div>
     </div>

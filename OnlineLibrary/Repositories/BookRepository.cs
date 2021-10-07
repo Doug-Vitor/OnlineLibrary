@@ -39,7 +39,8 @@ namespace OnlineLibrary.Repositories
             if (id is null)
                 throw new IdNotProvidedException("ID não informado.");
 
-            Book book = await _context.Books.Where(book => book.Id == id).FirstOrDefaultAsync();
+            Book book = await _context.Books.Where(book => book.Id == id).Include(book => book.Author)
+                .FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID fornecido.");
 
@@ -55,10 +56,10 @@ namespace OnlineLibrary.Repositories
 
         public async Task<Book> GetByAuthorIdAsync(int? authorId)
         {
-            if (id is null)
+            if (authorId is null)
                 throw new IdNotProvidedException("ID não informado");
 
-            Book book = await _context.Books.Where(book => book.Author.Id == id).Include(bk => bk.Author)
+            Book book = await _context.Books.Where(book => book.Author.Id == authorId).Include(bk => bk.Author)
                 .FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID informado.");

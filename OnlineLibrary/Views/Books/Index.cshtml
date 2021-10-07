@@ -22,12 +22,10 @@
 
 @if (Model.PageCount > 1)
 {
-    <div class="container" style="display:inline-block">
+    <div style="display:inline-block">
         <h4 class="form-control">Página @Model.Page de @Model.PageCount</h4>
-        <div style="display:inline-block">
-            <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page-1">Anterior</a>
-            <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page+1">Próxima</a>
-        </div>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page-1">Anterior</a>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page+1">Próxima</a>
     </div>
 }
 

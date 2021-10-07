@@ -19,7 +19,7 @@ namespace OnlineLibrary.Models
         public DateTime Birthdate { get; set; }
 
         [DisplayName("Sua biografia")]
-        [StringLength(200, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
+        [StringLength(400, ErrorMessage = "Campo {0} não pode ultrapassar {1} caracteres.")]
         public string ShortBiography { get; set; }
 
         public string ImagePath { get; set; }
@@ -27,6 +27,13 @@ namespace OnlineLibrary.Models
 
         public Author()
         {
+        }
+
+        public Author(string fullName, DateTime birthdate, string shortBiography)
+        {
+            FullName = fullName;
+            Birthdate = birthdate;
+            ShortBiography = shortBiography;
         }
 
         public Author(IdentityUser identityUser, string fullName, string shortBiography)
