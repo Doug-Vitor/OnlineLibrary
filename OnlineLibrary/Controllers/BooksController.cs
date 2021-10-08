@@ -21,34 +21,18 @@ namespace OnlineLibrary.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            BookViewModel viewModel = new("Todos os livros", page ?? 1, await _bookRepository.GetPageCountAsync(),
-                 await _bookRepository.GetAllAsync(page));
-            return View(viewModel);
+            return View(new BookViewModel("Todos os livros", await _bookRepository.GetPageCountAsync(),
+                page, await _bookRepository.GetAllAsync(page)));
         }
 
-        public async Task<IActionResult> FindByTitle(string searchString, int? page)
+        public async Task<IActionResult> FindByParams(string searchString, int? page)
         {
             try
             {
-                IEnumerable<Book> books = await _bookRepository.FindByTitleAsync(searchString, page);
+                IEnumerable<Book> books = await _bookRepository.FindByStringParamsAsync(searchString, page);
                 return View(new BookViewModel("Pesquisa por título", 
-                    $"Resultados para: {searchString}", page ?? 1, 
-                    await _bookRepository.GetPageCountAsync(), books));
-            }
-            catch (ApplicationException error)
-            {
-                return RedirectToAction(nameof(Error), new { message = error.Message });
-            }
-        }
-
-        public async Task<IActionResult> FindByAuthor(string searchString, int? page)
-        {
-            try
-            {
-                IEnumerable<Book> books = await _bookRepository.FindByAuthorAsync(searchString, page);
-                return View(new BookViewModel("Pesquisa por autor",
-                    $"Resultados para: {searchString}", page ?? 1,
-                    await _bookRepository.GetPageCountAsync(), books));
+                    $"Resultados para: {searchString}", await _bookRepository.GetPageCountAsync(),
+                    page ?? 1, books));
             }
             catch (ApplicationException error)
             {

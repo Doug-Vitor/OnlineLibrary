@@ -50,8 +50,8 @@ namespace OnlineLibrary.Repositories
         public async Task<IEnumerable<Book>> GetAllAsync(int? page)
         {
             int booksToSkip = ((page ?? 1) - 1) * 15;
-            return await _context.Books.Include(bk => bk.Author).Skip(booksToSkip).Take(15)
-                .ToListAsync();
+            return await _context.Books.Include(bk => bk.Author).OrderBy(book => book.Title)
+                .Skip(booksToSkip).Take(15).ToListAsync();
         }
 
         public async Task<Book> GetByAuthorIdAsync(int? authorId)
@@ -84,37 +84,34 @@ namespace OnlineLibrary.Repositories
                 .Where(bk => bk.Author.IdentityUser.Id == authenticatedUserId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Book>> FindByTitleAsync(string title, int? page)
+        public async Task<IEnumerable<Book>> FindByStringParamsAsync(string searchString, int? page)
         {
-            return await FindByStringParameterAsync(title, page, true);
-        }
-
-        public async Task<IEnumerable<Book>> FindByAuthorAsync(string authorName, int? page)
-        {
-            return await FindByStringParameterAsync(authorName, page, false);
-        }
-
-        private async Task<IEnumerable<Book>> FindByStringParameterAsync(string parameter, 
-            int? page, bool findByTitle)
-        {
-            if (string.IsNullOrWhiteSpace(parameter))
+            if (string.IsNullOrWhiteSpace(searchString))
                 throw new StringNotProvidedException("Nenhum parâmetro de pesquisa foi informado.");
 
-            List<Book> books = new();
             int booksToSkip = ((page ?? 1) - 1) * 15;
-            if (findByTitle)
-                books = await _context.Books.Where(bk => bk.Title.ToLower()
-                    .Contains(parameter.ToLower())).Include(bk => bk.Author).Skip(booksToSkip)
-                    .Take(15).ToListAsync();
-            else
-                books = await _context.Books.Include(bk => bk.Author).Where(bk => 
-                    bk.Author.FullName.ToLower().Contains(parameter.ToLower()))
-                    .Skip(booksToSkip).Take(15).ToListAsync();
 
-            if (books.Count == 0)
-                throw new NotFoundException("Não foi possível encontrar nenhum livro correspondente ao parâmetro de pesquisa informado.");
+            List<Book> books = await FindByTitleAsync(searchString, booksToSkip) as List<Book>;
+            books.AddRange(await FindByAuthorAsync(searchString, booksToSkip));
 
-            return books;
+            IEnumerable<Book> booksWithoutDuplicates = books.Distinct().ToList();
+            return booksWithoutDuplicates;
+        }
+
+        private async Task<IEnumerable<Book>> FindByTitleAsync(string searchString, int booksToSkip)
+        {
+            searchString = searchString.ToLower();
+            return await _context.Books.OrderBy(book => book.Title).Skip(booksToSkip).Take(15)
+                .Where(book => book.Title.ToLower().Contains(searchString)).Include(book => book.Author)
+                .ToListAsync();
+        }
+
+        private async Task<IEnumerable<Book>> FindByAuthorAsync(string searchString, int booksToSkip)
+        {
+            searchString = searchString.ToLower();
+            return await _context.Books.Include(book => book.Author).OrderBy(book => book.Author.FullName)
+                .Skip(booksToSkip).Take(15)
+                .Where(book => book.Author.FullName.ToLower().Contains(searchString)).ToListAsync();
         }
 
         public async Task UpdateAsync(Book book)

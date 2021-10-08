@@ -6,31 +6,33 @@ namespace OnlineLibrary.Models.ViewModels
     {
         public string CurrentFilter { get; set; }
         public string FilterDetails { get; set; }
-        public int? Page { get; set; }
-        public int PageCount { get; set; }
+        public PageDetails PageDetails { get; set; }
         public IEnumerable<Book> Books { get; set; }
 
         public BookViewModel()
         {
         }
 
-        public BookViewModel(string currentFilter, int? page, int pageCount,
-            IEnumerable<Book> books)
+        public BookViewModel(string currentFilter, int totalPages, int? currentPage, IEnumerable<Book> books)
         {
             CurrentFilter = currentFilter;
-            Page = page;
-            PageCount = pageCount;
             Books = books;
+            SetPageDetails(totalPages, currentPage);
         }
 
-        public BookViewModel(string currentFilter, string filterDetails, int page, 
-            int pageCount, IEnumerable<Book> books)
+        public BookViewModel(string currentFilter, string filterDetails, int totalPages, 
+            int? currentPage, IEnumerable<Book> books)
         {
             CurrentFilter = currentFilter;
             FilterDetails = filterDetails;
-            Page = page;
-            PageCount = pageCount;
             Books = books;
+            SetPageDetails(totalPages, currentPage);
+        }
+
+        public void SetPageDetails(int totalPage, int? currentPage)
+        {
+            int currentPageValue = currentPage ?? 1;
+            PageDetails = new PageDetails(currentPageValue, totalPage);
         }
     }
 }

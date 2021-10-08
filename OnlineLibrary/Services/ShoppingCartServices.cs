@@ -53,8 +53,15 @@ namespace OnlineLibrary.Services
         public async Task DecreaseItemQuantityAsync(int itemId)
         {
             ShoppingCartItem cartItem = await _cartItemsRepository.GetByIdAsync(itemId);
+
             if (cartItem != null)
             {
+                if (cartItem.Quantity == 1)
+                {
+                    await _cartItemsRepository.RemoveAsync(cartItem.Id);
+                    return;
+                }
+
                 cartItem.DecreaseQuantity();
                 await _cartItemsRepository.UpdateAsync(cartItem);
             }

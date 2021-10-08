@@ -10,8 +10,8 @@
 
     <form>
         <div class="form-group divElements">
-            <input type="text" class="form-control" style="text-align:right" placeholder="Pesquisar" name="search" />
-            <input type="submit" class="btn btn-success" value="Pesquisa por todo o site" asp-action="FindByParams" />
+            <input type="text" class="form-control" style="text-align:right" placeholder="Pesquisar" name="searchString" />
+            <input type="submit" class="btn btn-success" value="Pesquisar" style="float:right" asp-action="FindByParams" />
         </div>
     </form>
 </div>
@@ -24,11 +24,11 @@
 {
     @if (Model.PageDetails.HasPreviousPage())
     {
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.PreviousPage">Página anterior</a>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.PreviousPage" asp-route-search="@Model.CurrentFilter">Página anterior</a>
     }
     @if (Model.PageDetails.HasNextPage())
     {
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.NextPage">Próxima página</a>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.NextPage" asp-route-search="@Model.CurrentFilter">Próxima página</a>
     }
 }
 

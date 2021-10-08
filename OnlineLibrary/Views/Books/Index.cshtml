@@ -12,21 +12,23 @@
     <form>
         <div class="form-group div-elements">
             <input type="text" class="form-control" style="text-align:right" placeholder="Pesquisar" name="searchString" />
-            <input type="submit" class="btn btn-success" value="Pesquisar por título" asp-action="FindByTitle" />
-            <input type="submit" class="btn btn-success" value="Pesquisar por autor" asp-action="FindByAuthor" />
+            <input type="submit" class="btn btn-success" value="Pesquisar" style="float:right" asp-action="FindByParams" />
         </div>
     </form>
 </div>
 
 <partial name="_BooksPartial" for="Books" />
 
-@if (Model.PageCount > 1)
+@if (Model.PageDetails.TotalPages > 1)
 {
-    <div style="display:inline-block">
-        <h4 class="form-control">Página @Model.Page de @Model.PageCount</h4>
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page-1">Anterior</a>
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.Page+1">Próxima</a>
-    </div>
+    @if (Model.PageDetails.HasPreviousPage())
+    {
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.PreviousPage">Página anterior</a>
+    }
+    @if (Model.PageDetails.HasNextPage())
+    {
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.NextPage">Próxima página</a>
+    }
 }
 
 <style>

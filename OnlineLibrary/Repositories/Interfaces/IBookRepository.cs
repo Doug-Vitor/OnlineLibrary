@@ -12,8 +12,7 @@ namespace OnlineLibrary.Repositories.Interfaces
         Task<Book> GetByAuthorIdAsync(int? authorId);
         Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync();
         Task<IEnumerable<Book>> GetByGenre(int enumValue, int? page);
-        Task<IEnumerable<Book>> FindByTitleAsync(string title, int? page);
-        Task<IEnumerable<Book>> FindByAuthorAsync(string authorName, int? page);
+        Task<IEnumerable<Book>> FindByStringParamsAsync(string searchString, int? page);
         Task UpdateAsync(Book book);
         Task RemoveAsync(int id);
 

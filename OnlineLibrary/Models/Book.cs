@@ -1,6 +1,7 @@
 ﻿using OnlineLibrary.Models.Enums;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace OnlineLibrary.Models
 {
@@ -41,6 +42,11 @@ namespace OnlineLibrary.Models
             Summary = summary;
             Price = price;
             Author = author;
+        }
+
+        public string ReturnPrice()
+        {
+            return Price.ToString("C2", CultureInfo.CurrentCulture);
         }
     }
 }
