@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
 using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
-using OnlineLibrary.Models.Enums;
 using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
 using System;
@@ -39,8 +38,8 @@ namespace OnlineLibrary.Repositories
             if (id is null)
                 throw new IdNotProvidedException("ID não informado.");
 
-            Book book = await _context.Books.Where(book => book.Id == id).Include(book => book.Author)
-                .FirstOrDefaultAsync();
+            Book book = await _context.Books.Where(book => book.Id == id)
+                .Include(book => book.Author).FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID fornecido.");
 
@@ -59,7 +58,8 @@ namespace OnlineLibrary.Repositories
             if (authorId is null)
                 throw new IdNotProvidedException("ID não informado");
 
-            Book book = await _context.Books.Where(book => book.Author.Id == authorId).Include(bk => bk.Author)
+            Book book = await _context.Books.OrderBy(book => book.Title)
+                .Where(book => book.Author.Id == authorId).Include(bk => bk.Author)
                 .FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID informado.");
@@ -67,14 +67,13 @@ namespace OnlineLibrary.Repositories
             return book;
         }
 
-        public async Task<IEnumerable<Book>> GetByGenre(int genreValue, int? page)
+        public async Task<IEnumerable<Book>> GetByGenre(int genreId, int? page)
         {
             int booksToSkip = ((page ?? 1) - 1) * 15;
-            string genreName = Enum.GetName(typeof(Genre), genreValue);
-            Genre genre = (Genre)Enum.Parse(typeof(Genre), genreName);
 
-            return await _context.Books.Where(bk => bk.Genre == genre).Include(bk => bk.Author)
-                .Skip(booksToSkip).Take(15).ToListAsync();
+            return await _context.Books.OrderBy(book => book.Title)
+                .Where(bk => bk.Genre.Id == genreId).Include(bk => bk.Author)
+                .Include(book => book.Genre).Skip(booksToSkip).Take(15).ToListAsync();
         }
 
         public async Task<IEnumerable<Book>> GetByAuthorAuthenticatedAsync()
@@ -145,11 +144,6 @@ namespace OnlineLibrary.Repositories
             {
                 throw;
             }
-        }
-
-        public async Task<int> GetPageCountAsync()
-        {
-            return (int)Math.Ceiling((double)await _context.Books.CountAsync() / 15);
         }
     }
 }

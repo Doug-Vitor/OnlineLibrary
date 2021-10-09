@@ -19,9 +19,7 @@ namespace OnlineLibrary.Repositories
         }
 
         public void DetachEntity(ApplicationUser user)
-        {
-            _context.Entry(user).State = EntityState.Detached;
-        }
+            => _context.Entry(user).State = EntityState.Detached;
 
         public async Task<ApplicationUser> GetAuthenticatedUserAsync()
         {

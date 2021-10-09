@@ -49,6 +49,7 @@ namespace OnlineLibrary
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IBookServices, BookServices>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
 
             services.AddScoped<IImageManagerServices, ImageManagerServices>();
 

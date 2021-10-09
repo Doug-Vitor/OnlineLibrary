@@ -14,6 +14,7 @@ namespace OnlineLibrary.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Genre> Genres { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartsItems { get; set; }
         public DbSet<Purchase> Purchases { get; set; }

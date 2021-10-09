@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Models;
-using OnlineLibrary.Models.Enums;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLibrary.Controllers
@@ -40,14 +40,15 @@ namespace OnlineLibrary.Controllers
             }
         }
 
-        public async Task<IActionResult> GetByGenre(int enumValue, int? page)
+        public async Task<IActionResult> GetByGenre(int genreId, int? page)
         {
             try
             {
-                var genreName = EnumExtensions.GetDisplayName((Genre)enumValue);
+                IEnumerable<Book> books = await _bookRepository.GetByGenre(genreId, page);
+                string genreName = books.First().Genre.Name;
                 return View(new BookViewModel("Livros por gênero", $"Resultados para: {genreName}",
                     page ?? 1, await _bookRepository.GetPageCountAsync(),
-                    await _bookRepository.GetByGenre(enumValue, page)));
+                    books, genreId));
             }
             catch (InvalidOperationException)
             {

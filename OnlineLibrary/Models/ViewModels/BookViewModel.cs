@@ -6,6 +6,7 @@ namespace OnlineLibrary.Models.ViewModels
     {
         public string CurrentFilter { get; set; }
         public string FilterDetails { get; set; }
+        public int? GenreId { get; set; }
         public PageDetails PageDetails { get; set; }
         public IEnumerable<Book> Books { get; set; }
 
@@ -20,11 +21,12 @@ namespace OnlineLibrary.Models.ViewModels
             SetPageDetails(totalPages, currentPage);
         }
 
-        public BookViewModel(string currentFilter, string filterDetails, int totalPages, 
-            int? currentPage, IEnumerable<Book> books)
+        public BookViewModel(string currentFilter, string filterDetails,
+            int totalPages,  int? currentPage, IEnumerable<Book> books, int? genreId = null)
         {
             CurrentFilter = currentFilter;
             FilterDetails = filterDetails;
+            GenreId = genreId;
             Books = books;
             SetPageDetails(totalPages, currentPage);
         }

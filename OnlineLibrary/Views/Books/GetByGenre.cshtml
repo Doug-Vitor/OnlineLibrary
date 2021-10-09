@@ -24,11 +24,11 @@
 {
     @if (Model.PageDetails.HasPreviousPage())
     {
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.PreviousPage">Página anterior</a>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.PreviousPage" asp-route-genreId="@Model.GenreId">Página anterior</a>
     }
     @if (Model.PageDetails.HasNextPage())
     {
-        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.NextPage">Próxima página</a>
+        <a type="button" class="btn btn-link" asp-action="Index" asp-route-page="@Model.PageDetails.NextPage" asp-route-genreId="@Model.GenreId">Próxima página</a>
     }
 }
 
