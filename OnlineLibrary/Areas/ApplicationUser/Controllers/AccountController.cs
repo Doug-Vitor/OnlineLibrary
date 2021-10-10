@@ -26,20 +26,14 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             _imageManagerServices = imageManagerServices;
         }
 
-        public async Task<IActionResult> MyProfile()
-        {
-            return View(await _accountRepository.GetAuthenticatedUserAsync());
-        }
+        public async Task<IActionResult> MyProfile() 
+            => View(await _accountRepository.GetAuthenticatedUserAsync());
         
-        public async Task<IActionResult> MyBooks()
-        {
-            return View(await _bookRepository.GetByAuthorAuthenticatedAsync());
-        }
+        public async Task<IActionResult> MyBooks() 
+            => View(await _bookRepository.GetByAuthorAuthenticatedAsync());
 
-        public async Task<IActionResult> Edit()
-        {
-            return View(await _accountRepository.GetAuthenticatedUserAsync());
-        }
+        public async Task<IActionResult> Edit() 
+            => View(await _accountRepository.GetAuthenticatedUserAsync());
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -48,14 +42,12 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             string imageUploadResult = await _imageManagerServices.UploadProfileImageAsync(imageFile, author.Id);
 
             if (string.IsNullOrWhiteSpace(imageUploadResult))
-            {
                 if (ModelState.IsValid)
                 {
                     author.ImagePath = $"~/Images/ProfilePhotos/{author.Id}.png";
                     await _authorRepository.UpdateAsync(author);
                     return RedirectToAction(nameof(MyProfile));
                 }
-            }
 
             ModelState.AddModelError(string.Empty, imageUploadResult);
             return View(author);

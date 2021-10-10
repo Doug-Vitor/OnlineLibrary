@@ -27,9 +27,9 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             {
                 return View(new UserPurchaseViewModel(await _purchaseRepository.GetByIdAsync(id)));
             }
-            catch (AccessDeniedException error)
+            catch (AccessDeniedException)
             {
-                return RedirectToAction("AccessDenied", "Home", new { area = "", message = error.Message });
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
             }
             catch (ApplicationException error)
             {
@@ -41,7 +41,6 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         {
             string requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View(new ErrorViewModel(requestId, message));
-
         }
     }
 }

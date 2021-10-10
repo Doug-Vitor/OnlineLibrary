@@ -35,15 +35,10 @@ namespace OnlineLibrary.Services
             return result;
         }
 
-        public async Task<bool> SignInAsync(UserInputViewModel inputModel)
-        {
-            return await _identityServices.SignInAsync(inputModel.UserName, inputModel.Password);
-        }
+        public async Task<bool> SignInAsync(UserInputViewModel inputModel) 
+            => await _identityServices.SignInAsync(inputModel.UserName, inputModel.Password);
 
-        public async Task SignOutAsync()
-        {
-            await _identityServices.SignOutAsync();
-        }
+        public async Task SignOutAsync() => await _identityServices.SignOutAsync();
 
         public async Task ChangeUserToAuthor(Author author)
         {
@@ -59,8 +54,6 @@ namespace OnlineLibrary.Services
         }
 
         public string GetErrorMessages(IdentityError error)
-        {
-            return IdentityErrorExtensions.TranslatedErrorDescription(error);
-        }
+            => IdentityErrorExtensions.TranslatedErrorDescription(error);
     }
 }

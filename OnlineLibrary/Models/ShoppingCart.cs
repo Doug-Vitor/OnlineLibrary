@@ -19,10 +19,8 @@ namespace OnlineLibrary.Models
             Buyer = buyer;
         }
 
-        public string GetTotalPrice()
-        {
-            return ShoppingCartItems.Select(prop => prop.Book.Price * prop.Quantity).Sum()
+        public string GetTotalPrice() 
+            => ShoppingCartItems.Select(prop => prop.Book.Price * prop.Quantity).Sum()
                 .ToString("C2", CultureInfo.CurrentCulture);
-        }
     }
 }

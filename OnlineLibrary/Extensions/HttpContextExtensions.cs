@@ -13,13 +13,9 @@ namespace OnlineLibrary.Extensions
         }
 
         public string GetAuthenticatedUserRole()
-        {
-            return _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
-        }
+            => _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
 
-        public string GetAuthenticatedUserId()
-        {
-            return _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
+        public string GetAuthenticatedUserId() 
+            => _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

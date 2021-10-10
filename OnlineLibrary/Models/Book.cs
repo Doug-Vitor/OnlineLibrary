@@ -43,9 +43,6 @@ namespace OnlineLibrary.Models
             Author = author;
         }
 
-        public string ReturnPrice()
-        {
-            return Price.ToString("C2", CultureInfo.CurrentCulture);
-        }
+        public string ReturnPrice() => Price.ToString("C2", CultureInfo.CurrentCulture);
     }
 }

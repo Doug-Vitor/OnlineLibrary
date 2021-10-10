@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
 using OnlineLibrary.Extensions;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
+using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,14 +15,13 @@ namespace OnlineLibrary.Repositories
     public class BookRepository : AbstractRepository, IBookRepository
     {
         private readonly HttpContextExtensions _contextExtensions;
-        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IImageManagerServices _imageManagerServices;
 
         public BookRepository(AppDbContext context, HttpContextExtensions contextExtensions,
-            IWebHostEnvironment hostEnvironment)
-            : base(context)
+            IImageManagerServices imageManagerServices) : base(context)
         {
             _contextExtensions = contextExtensions;
-            _hostEnvironment = hostEnvironment;
+            _imageManagerServices = imageManagerServices;
         }
 
         public async Task InsertAsync(Book book)
@@ -39,7 +37,7 @@ namespace OnlineLibrary.Repositories
                 throw new IdNotProvidedException("ID não informado.");
 
             Book book = await _context.Books.Where(book => book.Id == id)
-                .Include(book => book.Author).FirstOrDefaultAsync();
+                .Include(book => book.Genre).Include(book => book.Author).FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID fornecido.");
 
@@ -49,8 +47,8 @@ namespace OnlineLibrary.Repositories
         public async Task<IEnumerable<Book>> GetAllAsync(int? page)
         {
             int booksToSkip = ((page ?? 1) - 1) * 15;
-            return await _context.Books.Include(bk => bk.Author).OrderBy(book => book.Title)
-                .Skip(booksToSkip).Take(15).ToListAsync();
+            return await _context.Books.Include(book => book.Genre).Include(bk => bk.Author)
+                .OrderBy(book => book.Title).Skip(booksToSkip).Take(15).ToListAsync();
         }
 
         public async Task<Book> GetByAuthorIdAsync(int? authorId)
@@ -59,7 +57,8 @@ namespace OnlineLibrary.Repositories
                 throw new IdNotProvidedException("ID não informado");
 
             Book book = await _context.Books.OrderBy(book => book.Title)
-                .Where(book => book.Author.Id == authorId).Include(bk => bk.Author)
+                .Where(book => book.Author.Id == authorId).Include(book => book.Genre)
+                .Include(bk => bk.Author)
                 .FirstOrDefaultAsync();
             if (book is null)
                 throw new NotFoundException("Não foi possível encontrar um livro correspondente ao ID informado.");
@@ -101,35 +100,26 @@ namespace OnlineLibrary.Repositories
         {
             searchString = searchString.ToLower();
             return await _context.Books.OrderBy(book => book.Title).Skip(booksToSkip).Take(15)
-                .Where(book => book.Title.ToLower().Contains(searchString)).Include(book => book.Author)
-                .ToListAsync();
+                .Where(book => book.Title.ToLower().Contains(searchString))
+                .Include(book => book.Author).Include(book => book.Genre).ToListAsync();
         }
 
         private async Task<IEnumerable<Book>> FindByAuthorAsync(string searchString, int booksToSkip)
         {
             searchString = searchString.ToLower();
-            return await _context.Books.Include(book => book.Author).OrderBy(book => book.Author.FullName)
+            return await _context.Books.Include(book => book.Author)
+                .Include(book => book.Genre).OrderBy(book => book.Author.FullName)
                 .Skip(booksToSkip).Take(15)
                 .Where(book => book.Author.FullName.ToLower().Contains(searchString)).ToListAsync();
         }
 
         public async Task UpdateAsync(Book book)
         {
-            if (EnsureFileExists(book.Id) == false)
+            if (_imageManagerServices.EnsureImageBookExists(book.Id) == false)
                 book.ImagePath = "~/Images/BookImages/Default.png";
 
             _context.Update(book);
             await _context.SaveChangesAsync();
-        }
-
-        private bool EnsureFileExists(int bookId)
-        {
-            string imagePath = Path.Combine(_hostEnvironment.WebRootPath,
-                $@"Images\BookImages\{bookId}.png");
-            if (File.Exists(imagePath))
-                return true;
-
-            return false;
         }
 
         public async Task RemoveAsync(int id)

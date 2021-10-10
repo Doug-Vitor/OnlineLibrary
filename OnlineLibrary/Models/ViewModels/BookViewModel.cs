@@ -22,7 +22,7 @@ namespace OnlineLibrary.Models.ViewModels
         }
 
         public BookViewModel(string currentFilter, string filterDetails,
-            int totalPages,  int? currentPage, IEnumerable<Book> books, int? genreId = null)
+            int totalPages, int? currentPage, IEnumerable<Book> books, int? genreId = null)
         {
             CurrentFilter = currentFilter;
             FilterDetails = filterDetails;

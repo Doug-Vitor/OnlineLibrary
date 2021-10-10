@@ -2,6 +2,7 @@
 using OnlineLibrary.Models;
 using OnlineLibrary.Models.ViewModels;
 using OnlineLibrary.Repositories.Interfaces;
+using OnlineLibrary.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,26 +14,27 @@ namespace OnlineLibrary.Controllers
     public class BooksController : Controller   
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IPageCountServices _pageCountServices;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookRepository bookRepository, IPageCountServices pageCountServices)
         {
             _bookRepository = bookRepository;
+            _pageCountServices = pageCountServices;
         }
 
-        public async Task<IActionResult> Index(int? page)
-        {
-            return View(new BookViewModel("Todos os livros", await _bookRepository.GetPageCountAsync(),
-                page, await _bookRepository.GetAllAsync(page)));
-        }
+        public async Task<IActionResult> Index(int? page) 
+            => View(new BookViewModel("Todos os livros", 
+                await _pageCountServices.GetTotalPagesCountAsync(), page,
+                await _bookRepository.GetAllAsync(page)));
 
         public async Task<IActionResult> FindByParams(string searchString, int? page)
         {
             try
             {
                 IEnumerable<Book> books = await _bookRepository.FindByStringParamsAsync(searchString, page);
+                int totalPages = await _pageCountServices.GetTotalPagesCountWithSearchParametersAsync(searchString);
                 return View(new BookViewModel("Pesquisa por título", 
-                    $"Resultados para: {searchString}", await _bookRepository.GetPageCountAsync(),
-                    page ?? 1, books));
+                    $"Resultados para: {searchString}", totalPages, page, books));
             }
             catch (ApplicationException error)
             {
@@ -45,10 +47,10 @@ namespace OnlineLibrary.Controllers
             try
             {
                 IEnumerable<Book> books = await _bookRepository.GetByGenre(genreId, page);
+                int totalPages = await _pageCountServices.GetTotalPagesCountSearchingByGenre(genreId);
                 string genreName = books.First().Genre.Name;
                 return View(new BookViewModel("Livros por gênero", $"Resultados para: {genreName}",
-                    page ?? 1, await _bookRepository.GetPageCountAsync(),
-                    books, genreId));
+                    totalPages, page, books, genreId));
             }
             catch (InvalidOperationException)
             {

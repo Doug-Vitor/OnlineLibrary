@@ -18,9 +18,7 @@ namespace OnlineLibrary.Services
         }
 
         public async Task<IdentityUser> FindByIdAsync(string userId)
-        {
-            return await _userManager.FindByIdAsync(userId);
-        }
+            => await _userManager.FindByIdAsync(userId);
 
         public async Task ChangeUserRoleAsync(IdentityUser user, string oldRole, string newRole)
         {
@@ -52,9 +50,6 @@ namespace OnlineLibrary.Services
             return result.Succeeded;
         }
 
-        public async Task SignOutAsync()
-        {
-            await _signInManager.SignOutAsync();
-        }
+        public async Task SignOutAsync() => await _signInManager.SignOutAsync();
     }
 }

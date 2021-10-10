@@ -7,5 +7,7 @@ namespace OnlineLibrary.Services.Interfaces
     {
         Task<string> UploadBookImageAsync(IFormFile formFile, int bookId);
         Task<string> UploadProfileImageAsync(IFormFile formFile, int authorId);
+        bool EnsureImageBookExists(int bookId);
+        bool EnsureProfilePhotoExists(int authorId);
     }
 }

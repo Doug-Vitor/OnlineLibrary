@@ -14,8 +14,6 @@ namespace OnlineLibrary.Components
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
-        {
-            return View(await _genreRepository.GetAllAsync());
-        }
+            => View(await _genreRepository.GetAllAsync());
     }
 }

@@ -27,11 +27,8 @@ namespace OnlineLibrary.Controllers
             _purchaseServices = purchaseServices;
         }
 
-        [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Index()
-        {
-            return View(await _cartRepository.GetByAuthenticatedUserAsync());
-        }
+        public async Task<IActionResult> Index() 
+            => View(await _cartRepository.GetByAuthenticatedUserAsync());
 
         public async Task<RedirectToActionResult> AddBookToCart(int id)
         {
@@ -75,9 +72,7 @@ namespace OnlineLibrary.Controllers
         }
 
         public async Task<IActionResult> Checkout()
-        {
-            return View(new CheckoutViewModel(await _cartItemsRepository.GetAllAsync()));
-        }
+            => View(new CheckoutViewModel(await _cartItemsRepository.GetAllAsync()));
 
         public async Task<RedirectToActionResult> ConfirmPurchase()
         {
@@ -91,7 +86,6 @@ namespace OnlineLibrary.Controllers
             return RedirectToAction(nameof(Index), "Home");
         }
 
-        [IgnoreAntiforgeryToken]
         public IActionResult Error(string message)
         {
             string requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;

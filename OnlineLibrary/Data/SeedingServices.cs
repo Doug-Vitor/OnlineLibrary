@@ -21,13 +21,9 @@ namespace OnlineLibrary.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             string[] roles = { "Default", "Author" };
-
             foreach (string role in roles)
-            {
-                bool roleExists = await roleManager.RoleExistsAsync(role);
-                if (roleExists is false)
+                if (await roleManager.RoleExistsAsync(role) is false)
                     await roleManager.CreateAsync(new IdentityRole(role));
-            }
         }
 
         public void SeedDb()

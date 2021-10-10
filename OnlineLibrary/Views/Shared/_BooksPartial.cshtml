@@ -16,9 +16,12 @@
             <h5>@book.ReturnPrice()</h5>
 
             <div style="float:right;">
-                <a asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@book.Id">
-                    <img src="~/Images/add-to-cart.png" width="32" height="32" asp-append-version="true" />
-                </a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@book.Id">
+                        <img src="~/Images/add-to-cart.png" width="32" height="32" asp-append-version="true" />
+                    </a>
+                }
                 <a class="btn btn-info" asp-action="Details" asp-route-id="@book.Id">Detalhes</a>
             </div>
         </div>

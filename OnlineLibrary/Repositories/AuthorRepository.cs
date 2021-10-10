@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineLibrary.Data;
 using OnlineLibrary.Models;
 using OnlineLibrary.Repositories.Exceptions;
 using OnlineLibrary.Repositories.Interfaces;
-using System.IO;
+using OnlineLibrary.Services.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,12 +11,12 @@ namespace OnlineLibrary.Repositories
 {
     public class AuthorRepository : AbstractRepository, IAuthorRepository
     {
-        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IImageManagerServices _imageManagerServices;
 
-        public AuthorRepository(AppDbContext context, IWebHostEnvironment hostEnvironment)
+        public AuthorRepository(AppDbContext context, IImageManagerServices imageManagerServices)
             : base(context)
         {
-            _hostEnvironment = hostEnvironment;
+            _imageManagerServices = imageManagerServices;
         }
 
         public async Task InsertAsync(Author author)
@@ -41,21 +40,11 @@ namespace OnlineLibrary.Repositories
 
         public async Task UpdateAsync(Author author)
         {
-            if (EnsureFileExists(author.Id) == false)
+            if (_imageManagerServices.EnsureProfilePhotoExists(author.Id) == false)
                 author.ImagePath = "~/Images/ProfilePhotos/Default.png";
 
             _context.Update(author);
             await _context.SaveChangesAsync();
-        }
-
-        private bool EnsureFileExists(int authorId)
-        {
-            string imagePath = Path.Combine(_hostEnvironment.WebRootPath,
-                $@"Images\ProfilePhotos\{authorId}.png");
-            if (File.Exists(imagePath))
-                return true;
-
-            return false;
         }
 
         public async Task RemoveAsync(int id)

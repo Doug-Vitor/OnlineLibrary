@@ -40,7 +40,7 @@ namespace OnlineLibrary.Repositories
 
             string userId = _contextExtensions.GetAuthenticatedUserId();
             if (purchase.ApplicationUser.IdentityUser.Id != userId)
-                throw new AccessDeniedException("O ID da compra fornecida não pertence a você.");
+                throw new AccessDeniedException();
 
             return purchase;
         }

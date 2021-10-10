@@ -68,9 +68,7 @@ namespace OnlineLibrary.Services
         }
 
         public async Task RemoveItemFromCartAsync(int itemId)
-        {
-            await _cartItemsRepository.RemoveAsync(itemId);
-        }
+            => await _cartItemsRepository.RemoveAsync(itemId);
 
         public async Task CancelCartAsync()
         {

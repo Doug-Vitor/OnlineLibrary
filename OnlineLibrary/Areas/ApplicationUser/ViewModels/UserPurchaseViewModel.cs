@@ -31,9 +31,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.ViewModels
         {
             double totalPrice = 0;
             foreach (PurchaseDetails purchaseDetails in Purchase.PurchaseDetails)
-            {
                 totalPrice += purchaseDetails.GetTotalPrice();
-            }
 
             return totalPrice.ToString("C2", CultureInfo.CurrentCulture);
         }
@@ -42,12 +40,8 @@ namespace OnlineLibrary.Areas.ApplicationUser.ViewModels
         {
             double totalPrice = 0;
             foreach (Purchase purchase in Purchases)
-            {
                 foreach (PurchaseDetails purchaseDetails in purchase.PurchaseDetails)
-                {
                     totalPrice += purchaseDetails.GetTotalPrice();
-                }
-            }
 
             return totalPrice.ToString("C2", CultureInfo.CurrentCulture);
         }

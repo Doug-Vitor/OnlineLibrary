@@ -23,9 +23,12 @@
         <label class="col-form-label" asp-for="Price"></label>
         <input class="form-control" readonly="" asp-for="Price" />
 
-        <div style="text-align:right;padding:20px">
-            <a class="btn btn-info" asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@Model.Id">Adicionar ao carrinho</a>
-        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div style="text-align:right;padding:20px">
+                <a class="btn btn-info" asp-controller="ShoppingCart" asp-action="AddBookToCart" asp-route-id="@Model.Id">Adicionar ao carrinho</a>
+            </div>
+        }
     </div>
 </div>
 

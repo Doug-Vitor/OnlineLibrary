@@ -23,12 +23,8 @@ namespace OnlineLibrary.Services
             List<Book> books = new();
 
             foreach (Purchase purchase in purchases)
-            {
                 foreach (PurchaseDetails purchaseDetails in purchase.PurchaseDetails)
-                {
                     books.Add(await _bookRepository.GetByIdAsync(purchaseDetails.BookId));
-                }
-            }
 
             return books;
         }

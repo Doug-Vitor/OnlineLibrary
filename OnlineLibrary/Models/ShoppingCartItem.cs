@@ -16,14 +16,8 @@
             Quantity = quantity;
         }
 
-        public void AddQuantity()
-        {
-            Quantity++;
-        }
+        public void AddQuantity() => Quantity++;
 
-        public void DecreaseQuantity()
-        {
-            Quantity--;
-        }
+        public void DecreaseQuantity() => Quantity--;
     }
 }

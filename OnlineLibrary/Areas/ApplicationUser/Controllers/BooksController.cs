@@ -16,23 +16,24 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
     [Authorize(Roles = "Author")]
     public class BooksController : Controller
     {
-        private readonly IBookRepository _bookRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IImageManagerServices _imageManagerServices;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IBookRepository _bookRepository;
 
-        public BooksController(IBookRepository bookRepository, IAccountRepository accountRepository,
-            IImageManagerServices imageManagerServices)
+        public BooksController(IAccountRepository accountRepository, 
+            IImageManagerServices imageManagerServices, IGenreRepository genreRepository, 
+            IBookRepository bookRepository)
         {
-            _bookRepository = bookRepository;
             _accountRepository = accountRepository;
             _imageManagerServices = imageManagerServices;
+            _genreRepository = genreRepository;
+            _bookRepository = bookRepository;
         }
 
-        public async Task <IActionResult> Create()
-        {
-            return View(new BookInputViewModel(
-                await _accountRepository.GetAuthenticatedUserAsync() as Author));
-        }
+        public async Task <IActionResult> Create() => 
+            View(new BookInputViewModel(await _accountRepository.GetAuthenticatedUserAsync() as Author,
+                await _genreRepository.GetAllAsync()));
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -45,7 +46,8 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             }
 
             return View(new BookInputViewModel(
-                await _accountRepository.GetAuthenticatedUserAsync() as Author, book));
+                await _accountRepository.GetAuthenticatedUserAsync() as Author,
+                await _genreRepository.GetAllAsync(), book));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -66,14 +68,12 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
         {
             string imageUploadResult = await _imageManagerServices.UploadBookImageAsync(imageFile, book.Id);
             if (string.IsNullOrWhiteSpace(imageUploadResult))
-            {
                 if (ModelState.IsValid)
                 {
                     book.ImagePath = $"~/Images/BookImages/{book.Id}.png";
                     await _bookRepository.UpdateAsync(book);
                     return RedirectToAction(nameof(Index), "Home");
                 }
-            }
             else
                 ModelState.AddModelError(string.Empty, imageUploadResult);
 
@@ -89,7 +89,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             }
             catch (ApplicationException error)
             {
-                return RedirectToAction(nameof(error), new { message = error.Message });
+                return RedirectToAction(nameof(Error), new { message = error.Message });
             }
         }
 
@@ -104,7 +104,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             }
             catch (ApplicationException error)
             {
-                return RedirectToAction(nameof(error), new { message = error.Message });
+                return RedirectToAction(nameof(Error), new { message = error.Message });
             }
         }
 

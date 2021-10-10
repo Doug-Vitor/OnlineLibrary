@@ -18,10 +18,7 @@ namespace OnlineLibrary.Controllers
             _accountServices = userServices;
         }
 
-        public IActionResult SignUp()
-        {
-            return View();
-        }
+        public IActionResult SignUp() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -40,10 +37,7 @@ namespace OnlineLibrary.Controllers
             return View(inputModel);
         }
 
-        public IActionResult SignIn()
-        {
-            return View();
-        }
+        public IActionResult SignIn() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]

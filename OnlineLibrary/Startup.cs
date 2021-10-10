@@ -49,6 +49,7 @@ namespace OnlineLibrary
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IBookServices, BookServices>();
+            services.AddScoped<IPageCountServices, PageCountServices>();
             services.AddScoped<IGenreRepository, GenreRepository>();
 
             services.AddScoped<IImageManagerServices, ImageManagerServices>();
@@ -82,7 +83,6 @@ namespace OnlineLibrary
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

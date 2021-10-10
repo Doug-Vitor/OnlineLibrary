@@ -17,9 +17,7 @@ namespace OnlineLibrary.Areas.ApplicationUser.Controllers
             _purchaseRepository = purchaseRepository;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(new UserPurchaseViewModel(await _purchaseRepository.GetByAuthenticatedUserAsync()));
-        }
+        public async Task<IActionResult> Index() 
+            => View(new UserPurchaseViewModel(await _purchaseRepository.GetByAuthenticatedUserAsync()));
     }
 }

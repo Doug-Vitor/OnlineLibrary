@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using OnlineLibrary.Services.Interfaces;
 using System.Collections.Generic;
 using System.IO;
@@ -78,6 +77,26 @@ namespace OnlineLibrary.Services
             await formFile.CopyToAsync(stream);
 
             return null;
+        }
+
+        public bool EnsureImageBookExists(int bookId)
+        {
+            string imagePath = Path.Combine(_hostEnvironment.WebRootPath,
+                $@"Images\BookImages\{bookId}.png");
+            if (File.Exists(imagePath))
+                return true;
+
+            return false;
+        }
+
+        public bool EnsureProfilePhotoExists(int authorId)
+        {
+            string imagePath = Path.Combine(_hostEnvironment.WebRootPath,
+                $@"Images\ProfilePhotos\{authorId}.png");
+            if (File.Exists(imagePath))
+                return true;
+
+            return false;
         }
     }
 }

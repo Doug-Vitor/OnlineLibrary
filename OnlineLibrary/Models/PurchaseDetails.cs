@@ -1,9 +1,12 @@
-﻿namespace OnlineLibrary.Models
+﻿using System.ComponentModel;
+
+namespace OnlineLibrary.Models
 {
     public class PurchaseDetails : Entity
     {
         public int BookId { get; set; }
         public virtual Book Book { get; set; }
+        [DisplayName("Quantidade")]
         public int Quantity { get; set; }
 
         public int PurchaseId { get; set; }
@@ -19,9 +22,6 @@
             Quantity = quantity;
         }
 
-        public double GetTotalPrice()
-        {
-            return Book.Price * Quantity;
-        }
+        public double GetTotalPrice() => Book.Price * Quantity;
     }
 }

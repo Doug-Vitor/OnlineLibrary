@@ -14,9 +14,7 @@ namespace OnlineLibrary.Models.ViewModels
         }
 
         public string GetTotalPrice()
-        {
-            return ShoppingCartItems.Select(item => item.Book.Price * item.Quantity).Sum()
+            => ShoppingCartItems.Select(item => item.Book.Price * item.Quantity).Sum()
                 .ToString("C2", CultureInfo.CurrentCulture);
-        }
     }
 }

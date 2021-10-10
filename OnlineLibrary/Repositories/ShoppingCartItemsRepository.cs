@@ -23,7 +23,7 @@ namespace OnlineLibrary.Repositories
         {
             ShoppingCart cart = await _cartRepository.GetByAuthenticatedUserAsync();
             return await _context.ShoppingCartsItems.Where(item => item.ShoppingCart.Id == cart.Id)
-                .Include(item => item.Book).ThenInclude(book => book.Author).ToListAsync();
+                .Include(item => item.Book).ThenInclude(book => book.Author).Include(book => book.Book.Genre).ToListAsync();
         }
 
         public async Task InsertAsync(ShoppingCartItem cartItem)

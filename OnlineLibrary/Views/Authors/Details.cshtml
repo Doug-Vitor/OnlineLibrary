@@ -31,7 +31,7 @@
         <input class="form-control" asp-for="Birthdate" readonly="" />
 
         <div style="text-align:right;padding:20px;">
-            <a class="btn btn-info" asp-controller="Books" asp-action="FindByAuthor" asp-route-searchString="@Model.FullName">Livros deste autor</a>
+            <a class="btn btn-info" asp-controller="Books" asp-action="FindByParams" asp-route-searchString="@Model.FullName">Livros deste autor</a>
         </div>
     </div>
 </div>
