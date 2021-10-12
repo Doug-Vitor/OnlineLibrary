@@ -1,6 +1,9 @@
 <h1 align="center">Online Library</h1>
 <h4 align="center">Simulação de uma biblioteca online, com possibilidades de criação de contas, criação de livros e carrinho de compras utilizável.</h3>
 
+<h3>:warning: ATENÇÃO:</h3>
+<p><strong>TODOS</strong> os livros contidos nessa aplicação foram retirados do site oficial da <a href="https://www.amazon.com.br/Livros/b/?ie=UTF8&node=6740748011&ref_=topnav_storetab_b">Amazon</a> e todos possuem seus respectivos autores visando manter seus direitos autorais. É válido lembrar que, essa aplicação é um <strong>PROJETO PARA PORTFÓLIO</strong> e não possui nenhum fim lucrativo. Portanto, não solicitamos nenhum dado pessoal dos usuários que eventualmente queiram testar esse projeto. Fique atento!<p>
+
 <br/>
 <h3>:computer: Tecnologias utilizadas:</h3>
 <h4>
